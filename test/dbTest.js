@@ -10,7 +10,7 @@ const fs = require('fs');
 describe('DataBase', () =>{
 
     let freshDB = null;
-    beforeEach( done => {
+    before( done => {
         freshDB = new  Db(__dirname, done);
     });
 
