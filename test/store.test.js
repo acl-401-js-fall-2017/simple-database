@@ -28,4 +28,18 @@ describe('make store', () => {
         store.save(obj1);
         assert.deepEqual(typeof obj1._id, 'string');
     });
+
+    it('should get saved object', done => {
+        store.save(obj1,(err, savedObj1) => {
+            if (err) return done(err);
+            assert.ok(savedObj1._id);
+            assert.equal(savedObj1.name, obj1.name);
+
+            store.get(savedObj1._id, (err, gotObj1) => {
+                if (err) return done(err);
+                assert.deepEqual(gotObj1, savedObj1);
+                done();
+            });
+        }); 
+    });
 });
