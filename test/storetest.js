@@ -3,29 +3,43 @@ const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
-const store = require('../lib/store'); //should be cap'd?
+const Store = require('../lib/store');
 
-const rootDirectory = path.join(__dirname, 'data') //replace data when needed
+// const rootDirectory = path.join(__dirname, 'data') //replace data when needed
 
 describe('saves file', () => {
+    
     const dataDir = path.join(__dirname, 'dataDir');
+    let store = null;
 
-    //removing and recreating directory
     beforeEach(done => {
         rimraf( dataDir, err => {
             if(err) return done(err);
             mkdirp(dataDir, err => {
                 if(err) return done(err);
-            })
-        })
-        const freshStore = new Store();
-    })
+                store = new Store(dataDir);
+                done();
+            });
+        });
+    });
 
-    it('saves an object to a file', () => {
-        let saved = store.save(object) //change object name?
-        assert.ok(saved._id)
-    })
-})
+    it('gets a saved object', (done) => {
+        const puppy = { name: 'fido' };
+
+        store.save(puppy, (err, saved) => {
+            if(err) return done(err);
+            assert.ok(saved._id);
+            assert.equal(saved.name, puppy.name);
+
+            store.get(saved._id, (err, got) => {
+                if(err) return done(err);
+                assert.deepEqual(got, saved);
+                
+            });
+        });
+        done();
+    });
+});
 
 
 
