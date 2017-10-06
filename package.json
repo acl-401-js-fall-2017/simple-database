@@ -1,0 +1,29 @@
+{
+  "name": "simple-database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "mocha",
+    "start": "npm run test -- -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckrountree/simple-database.git"
+  },
+  "author": "CK Rountree <jmail0207@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ckrountree/simple-database/issues"
+  },
+  "homepage": "https://github.com/ckrountree/simple-database#readme",
+  "devDependencies": {
+    "eslint": "^4.8.0",
+    "mocha": "^4.0.1"
+  }
+}
