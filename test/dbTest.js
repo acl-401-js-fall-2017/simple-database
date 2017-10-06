@@ -5,8 +5,6 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 const dbName = (__dirname + '/db');
 
-// console.log('DIRNAME', __dirname);
-// console.log('FILENAME', __filename);
 
 describe('DataBase', () =>{
 
@@ -14,10 +12,8 @@ describe('DataBase', () =>{
 
     //this checks to see if file exist, if exists delete to make a new one
     before( done => {
-        console.log('log test 1  ' +  fs.existsSync(dbName));
         if (fs.existsSync(dbName)){
             rimraf(dbName, () => {
-                console.log('this is db name  ' + dbName);
                 freshDB = new  Db(__dirname, done);
             });
         } else {

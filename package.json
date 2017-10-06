@@ -23,6 +23,7 @@
     "mocha": "^4.0.1"
   },
   "dependencies": {
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "shortid": "^2.2.8"
   }
 }
