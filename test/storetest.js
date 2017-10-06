@@ -23,7 +23,7 @@ describe('saves file', () => {
         });
     });
 
-    it('gets a saved object', (done) => {
+    it.only('gets a saved object', (done) => {
         const puppy = { name: 'fido' };
 
         store.save(puppy, (err, saved) => {
@@ -34,12 +34,29 @@ describe('saves file', () => {
             store.get(saved._id, (err, got) => {
                 if(err) return done(err);
                 assert.deepEqual(got, saved);
-                
+                done();
             });
+        });
+    });
+
+    it('returns null for a bad id',(done) => {
+        const noId = {};
+
+        store.get(noId, (err, got) => {
+            if(err) return done(err);
+            assert.equal(got, null);
+        });
+        done();
+    });
+    
+    it('save an object and removes the object with given id', (done) => {
+        const puppy = { name: 'fido' };
+        
+        store.save(puppy);
+        store.remove(puppy._id, (err, removed) => {
+            if(err) return done(err);
+            assert.equal(removed, {removed: true});
         });
         done();
     });
 });
-
-
-
