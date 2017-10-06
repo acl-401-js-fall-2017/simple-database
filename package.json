@@ -8,8 +8,10 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "lib": "lib",
     "pretest": "npm run lint",
-    "test": "mocha",
+    "test": "MOCHA_REPORTER_STACK_EXCLUDE=**/** mocha --reporter mocha-better-spec-reporter",
+    "test:callstack": "mocha",
     "start": "npm run test -- -w"
   },
   "repository": {
@@ -24,6 +26,12 @@
   "homepage": "https://github.com/ckrountree/simple-database#readme",
   "devDependencies": {
     "eslint": "^4.8.0",
-    "mocha": "^4.0.1"
+    "mkdirp": "^0.5.1",
+    "mocha": "^4.0.1",
+    "mocha-better-spec-reporter": "^3.1.0",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "shortid": "^2.2.8"
   }
 }
