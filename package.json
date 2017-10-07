@@ -1,0 +1,30 @@
+{
+  "name": "simple-database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "npm run test -- -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristinaMills/simple-database.git"
+  },
+  "keywords": [],
+  "author": "Christina Mills <chrimills@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChristinaMills/simple-database/issues"
+  },
+  "homepage": "https://github.com/ChristinaMills/simple-database#readme",
+  "devDependencies": {
+    "eslint": "^4.8.0",
+    "mocha": "^4.0.1"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2",
+    "shortid": "^2.2.8"
+  }
+}
