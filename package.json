@@ -20,9 +20,11 @@
   "homepage": "https://github.com/mugworks/simple-database#readme",
   "devDependencies": {
     "eslint": "^4.8.0",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "rimraf": "^2.6.2"
   },
   "dependencies": {
+    "path": "^0.12.7",
     "shortid": "^2.2.8"
   }
 }
