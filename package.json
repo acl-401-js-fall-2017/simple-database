@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lib": "lib",
-    "test": "MOCHA_REPORTER_STACK_EXCLUDE=**/** mocha --reporter mocha-better-spec-reporter",
-    "test:callstack": "mocha",
+    "test": "mocha",
     "start": "npm run test -- -w"
   },
   "repository": {
