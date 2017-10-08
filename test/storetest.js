@@ -91,6 +91,22 @@ describe('simple database', () => {
                 });
             });
         });
+
+        it('returns {removed: false} for invalid id', (done) => {
+            const puppy = { name: 'fido' };
+        
+            store.save(puppy, (err, savedObj) => {
+                if(err) return done(err);
+                assert.ok(savedObj._id);
+
+                store.remove('bad_id', (err, status) => {
+                    if (err) return done(err);
+                    assert.deepEqual(status, { removed: false});
+                    done();
+                });
+            });
+        });
+
         
     });
 });
