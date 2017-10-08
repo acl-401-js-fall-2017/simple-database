@@ -44,10 +44,15 @@ describe('make store', () => {
     });
     it('should remove object with id', done => {
         store.save(testObject, (err, savedtestObject) =>{
-            store.remove(savedtestObject, (err, bool)=>{
-                if (err) return done();
+            store.remove(savedtestObject._id, (bool, err)=>{
+                if (err) return done(err);
                 assert.deepEqual(bool, { removed: true });
-                done();
+                store.get(savedtestObject._id, (data, err)=>{
+                    if (err) return done(err);
+                    assert.deepEqual(data, null);
+                    done();
+                });
+                
             });
         });
         
