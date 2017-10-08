@@ -42,4 +42,14 @@ describe('make store', () => {
     it('should get "bad id" return null', done => {
         assert.deepEqual(store.get('bad id', done), null);
     });
+    it('should remove object with id', done => {
+        store.save(testObject, (err, savedtestObject) =>{
+            store.remove(savedtestObject, (err, bool)=>{
+                if (err) return done();
+                assert.deepEqual(bool, { removed: true });
+                done();
+            });
+        });
+        
+    });
 });
