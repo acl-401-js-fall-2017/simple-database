@@ -40,6 +40,6 @@ describe('make store', () => {
         }); 
     });
     it('should get "bad id" return null', done => {
-        store.save()
-    })
+        assert.deepEqual(store.get('bad id', done), null);
+    });
 });
