@@ -1,5 +1,4 @@
 const assert = require('assert');
-const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
@@ -44,11 +43,10 @@ describe('simple database', () => {
     
             store.save(puppy, (err, savedObj) => {
                 if(err) return done(err);
-                assert.ok(savedObj._id);
-        
+                
                 store.get(savedObj._id, (err, fetchedObj) => {
                     if(err) return done(err);
-                    assert.deepEqual(fetchedObj, savedObj);
+                    assert.deepEqual(fetchedObj, savedObj); //deepEqual because comparing objects
                     done();
                 });
             });
@@ -59,8 +57,7 @@ describe('simple database', () => {
     
             store.save(puppy, (err, savedObj) => {
                 if(err) return done(err);
-                assert.ok(savedObj._id);
-        
+                
                 store.get('bad_id', (err, fetchedObj) => {
                     if(err) return done(err);
                     assert.equal(fetchedObj, null);
@@ -82,11 +79,10 @@ describe('simple database', () => {
         
             store.save(puppy, (err, savedObj) => {
                 if(err) return done(err);
-                assert.ok(savedObj._id);
-
+                
                 store.remove(savedObj._id, (err, status) => {
                     if (err) return done(err);
-                    assert.deepEqual(status, { removed: true});
+                    assert.deepEqual(status, { removed: true}); //deepEqual because comparing objects
                     done();
                 });
             });
@@ -97,11 +93,10 @@ describe('simple database', () => {
         
             store.save(puppy, (err, savedObj) => {
                 if(err) return done(err);
-                assert.ok(savedObj._id);
-
+                
                 store.remove('bad_id', (err, status) => {
                     if (err) return done(err);
-                    assert.deepEqual(status, { removed: false});
+                    assert.deepEqual(status, { removed: false}); //deepEqual because comparing objects
                     done();
                 });
             });
