@@ -69,9 +69,28 @@ describe('simple database', () => {
             });
         });
 
+        it.skip('fetches all files', (done) => {
+            store.getAll();
+        });
+
+    });
+
+    describe('removes', () => {
         
+        it('removes the file of the object with that id', (done) => {
+            const puppy = { name: 'fido' };
+        
+            store.save(puppy, (err, savedObj) => {
+                if(err) return done(err);
+                assert.ok(savedObj._id);
 
-
+                store.getAll(savedObj._id, (err, status) => {
+                    if (err) return done(err);
+                    assert.deepEqual(status, { removed: true});
+                    done();
+                });
+            });
+        });
     });
 });
 
