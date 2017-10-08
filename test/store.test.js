@@ -4,17 +4,15 @@ const mkdirp = require('mkdirp');
 const Store = require('../lib/store');
 const path = require('path');
 
-describe('create storeDir name', () => {
-    // eslint-disable-next-line
-    const testDir = path.join(__dirname, 'data');
+describe.only('create storeDir name', () => {
     let store = null;
+    const testDir = path.join(__dirname, 'data');
 
     beforeEach(done => {
         rimraf(testDir, err => {
-            if (err) return done(err);
+            if(err) return done(err);
             mkdirp(testDir, err => {
-                if (err) return done(err);
-                // eslint-disable-next-line
+                if(err) return done(err);
                 store = new Store(testDir);
                 done();
             });
@@ -22,15 +20,15 @@ describe('create storeDir name', () => {
     });
 
     it('gets a saved obj', done => {
-        const obj1 = {name: 'Zac'};
-        store.save(obj1, (err, savedObj1) => {
+        const obj = {name: 'Kate'};
+        store.save(obj, (err, savedObj) => {
             if(err) return done(err);
-            assert.ok(savedObj1._id);
-            assert.equal(savedObj1.name, obj1.name);
+            assert.ok(savedObj._id);
+            assert.equal(savedObj.name, obj.name);
 
-            store.get(savedObj1._id, (err, gotObj1) => {
+            store.get(savedObj._id, (err, gotObjWithId) => {
                 if(err) return done(err);
-                assert.deepEqual(gotObj1, savedObj1);
+                assert.deepEqual(gotObjWithId, savedObj);
                 done();
             });
         });
