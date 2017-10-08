@@ -7,7 +7,7 @@ const Store = require('../lib/store');
 
 // const rootDirectory = path.join(__dirname, 'data') //replace data when needed
 
-describe('saves file', () => {
+describe('simple database', () => {
     
     const dataDir = path.join(__dirname, 'dataDir');
     let store = null;
@@ -23,40 +23,55 @@ describe('saves file', () => {
         });
     });
 
-    it.only('gets a saved object', (done) => {
-        const puppy = { name: 'fido' };
+    describe('saves', () => {
+    
+        it('gets a saved object', (done) => {
+            const puppy = { name: 'fido' };
 
-        store.save(puppy, (err, saved) => {
-            if(err) return done(err);
-            assert.ok(saved._id);
-            assert.equal(saved.name, puppy.name);
-
-            store.get(saved._id, (err, got) => {
+            store.save(puppy, (err, savedObj) => {
                 if(err) return done(err);
-                assert.deepEqual(got, saved);
+                assert.ok(savedObj._id);
+                assert.equal(savedObj.name, puppy.name);
                 done();
             });
         });
     });
 
-    it('returns null for a bad id',(done) => {
-        const noId = {};
-
-        store.get(noId, (err, got) => {
-            if(err) return done(err);
-            assert.equal(got, null);
-        });
-        done();
-    });
-    
-    it('save an object and removes the object with given id', (done) => {
-        const puppy = { name: 'fido' };
+    describe('gets', () => {
         
-        store.save(puppy);
-        store.remove(puppy._id, (err, removed) => {
-            if(err) return done(err);
-            assert.equal(removed, {removed: true});
+        it('retrieves saved object with given id', (done) => {
+            const puppy = { name: 'fido' };
+    
+            store.save(puppy, (err, savedObj) => {
+                if(err) return done(err);
+                assert.ok(savedObj._id);
+        
+                store.get(savedObj._id, (err, fetchedObj) => {
+                    if(err) return done(err);
+                    assert.deepEqual(fetchedObj, savedObj);
+                    done();
+                });
+            });
         });
-        done();
+
+        it('returns null with false id', (done) => {
+            const puppy = { name: 'fido' };
+    
+            store.save(puppy, (err, savedObj) => {
+                if(err) return done(err);
+                assert.ok(savedObj._id);
+        
+                store.get('bad_id', (err, fetchedObj) => {
+                    if(err) return done(err);
+                    assert.equal(fetchedObj, null);
+                    done();
+                });
+            });
+        });
+
+        
+
+
     });
 });
+
