@@ -8,8 +8,6 @@ describe.only('creating store dir', () => {
     let store = null;
     const testDir = path.join(__dirname, 'test-file');
     
-    let testFile;
-    
     beforeEach( done => {
         rimraf( testDir, err => {
             if(err) return done(err);
