@@ -57,4 +57,12 @@ describe('make store', () => {
         });
         
     });
+    it('should return remove false when passed bad id', done =>{
+        store.save(testObject, (err, savedtestObject)=>{
+            store.remove('bad id', (bool, err)=>{
+                assert.deepEqual(bool, {removed: false});
+                done();
+            });
+        });
+    });
 });
