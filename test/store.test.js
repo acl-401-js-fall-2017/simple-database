@@ -50,4 +50,20 @@ describe.only('create storeDir name', () => {
             });
         });
     });
+
+    it('gets and returns an array of all files', done => {
+        const obj = {name: 'Kate'};
+        
+        store.save(obj, (err, savedObj) => {
+            if(err) return done(err);
+            assert.ok(savedObj._id);
+            assert.equal(savedObj.name, obj.name);
+
+            store.getAll((err, allFiles) => {
+                if(err) return done(err);
+                assert.equal(allFiles.length, 1);
+                done();
+            });
+        });  
+    });
 });
