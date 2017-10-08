@@ -7,6 +7,7 @@ const Store = require('../lib/store');
 describe.only('creating store dir', () => {
     let store = null;
     const testDir = path.join(__dirname, 'test-file');
+    const testObject = {name: 'Zac'};
 
     beforeEach( done => {
         rimraf( testDir, err => {
@@ -20,7 +21,6 @@ describe.only('creating store dir', () => {
     });
 
     it('gets a saved obj', done => {
-        const testObject = {name: 'Zac'};
 
         store.save(testObject, (err, savedObject) => {
             if(err) return done(err);
@@ -33,5 +33,13 @@ describe.only('creating store dir', () => {
                 done();
             });
         });
+    });
+
+    it('removed file by id', done => {
+        store.remove(testObject._id, (err, removedObj) => {
+            assert.deepEqual(removedObj, { removed: true } );
+            done();
+        });
+
     });
 });
