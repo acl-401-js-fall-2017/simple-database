@@ -84,13 +84,14 @@ describe('simple database', () => {
                 if(err) return done(err);
                 assert.ok(savedObj._id);
 
-                store.getAll(savedObj._id, (err, status) => {
+                store.remove(savedObj._id, (err, status) => {
                     if (err) return done(err);
                     assert.deepEqual(status, { removed: true});
                     done();
                 });
             });
         });
+        
     });
 });
 
