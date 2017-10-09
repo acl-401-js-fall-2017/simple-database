@@ -100,7 +100,7 @@ describe('Stores', () => {
             }
         });
 
-        it.skip('gets all of the object files in the store', done =>{
+        it('gets all of the object files in the store', done =>{
             let allObjArr=[];
 
             myStore.save(thing, (err, newObj) => {
