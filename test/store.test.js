@@ -86,7 +86,6 @@ describe('make store', () => {
                         let sortedData = data.map((obj)=>{
                             return obj.name;
                         });
-
                         assert.deepEqual(sortedData.sort(), [savedObj1.name, savedObj2.name, savedObj3.name].sort());
                         done();
                     });
@@ -95,6 +94,15 @@ describe('make store', () => {
                 
             });
 
+        });
+    });
+    it('getAll() should return an empty array for a newly created store', done => {
+        store.getAll((data, err)=>{
+            if (err) return done(err);
+            console.log('I am err inside of get ALLtest', err);
+            console.log('I am data inside of get ALLtest', data);
+            assert.deepEqual(data, []);
+            done();
         });
     });
     it.skip('getStore should return an instance of the store', done => {
