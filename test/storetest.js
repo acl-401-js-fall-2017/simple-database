@@ -7,6 +7,7 @@ const makeDb = require('../lib/makeDb');
 
 // const rootDirectory = path.join(__dirname, 'data') //replace data when needed
 
+
 describe('simple database', () => {
     
     const root = path.join(__dirname, 'root');
@@ -18,15 +19,18 @@ describe('simple database', () => {
             mkdirp(root, err => {
                 if(err) return done(err);
                 store = new Store(root);
+
                 done();
             });
         });
     });
 
+
     describe('saves', () => {
     
         it('gets a saved object', (done) => {
             const puppy = { name: 'fido' };
+
 
             store.save(puppy, (err, savedObj) => {
                 if(err) return done(err);
@@ -99,6 +103,7 @@ describe('simple database', () => {
         }); 
     });
 
+
     describe('getsAll', () =>{
 
         it('gets all files created', (done) => {
@@ -144,3 +149,4 @@ describe('simple database', () => {
     });
 
 });
+
