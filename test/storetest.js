@@ -3,6 +3,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 const Store = require('../lib/store');
+const makeDb = require('../lib/makeDb');
 
 // const rootDirectory = path.join(__dirname, 'data') //replace data when needed
 
@@ -21,9 +22,6 @@ describe('simple database', () => {
             });
         });
     });
-
-    // const cats = null;
-    // const dogs = null;
 
     describe('saves', () => {
     
@@ -115,11 +113,34 @@ describe('simple database', () => {
 
                     store.getAll((err, filesArr) =>{
                         if(err) return done(err);
-                        assert.equal(filesArr.length, 3);
+                        assert.equal(filesArr.length, 2);
                         done();
                     });
                 }); 
             });
         });
     });
+
+     
+    describe('Db', () => {
+        const dbTestRoot = path.join(__dirname, 'dbTestRoot');
+        
+        beforeEach(done =>{
+            rimraf(dbTestRoot,err =>{
+                if(err) return done(err);
+                const database = new Database( dbTestRoot);
+                done();
+            });
+        });
+
+        it('checks the directory name exist in Db rootdir', (done) => {
+            makeDb.getStore('testName', err => {
+                if(err) return done(err);
+                assert.ok();
+                done();
+            });
+        });
+
+    });
+
 });
