@@ -7,7 +7,8 @@ const path = require('path');
 describe('create storeDir name', () => {
     let store = null;
     const testDir = path.join(__dirname, 'data');
-    
+
+    // clear any instances of Store and make new file prior to running each test
     beforeEach(done => {
         rimraf(testDir, err => {
             if(err) return done(err);
