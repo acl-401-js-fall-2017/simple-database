@@ -110,15 +110,20 @@ describe('make store', () => {
     });
 
  
-    it.skip('getStore should return an instance of the store', done => {
+    it.only('getStore should return an instance of the store', done => {
         DB.getStore('animals', (err, data) => {
             if (err) return done(err);
             let getStoreOutput = data;
-            DB.createStore('animals', (err, theStore) => { 
-                if (err) return done(err);
-                let createStoreOutput = theStore;
-                assert.deepEqual(createStoreOutput, getStoreOutput);
-                done();
+            console.log('store instance inside of get store', data);
+            // DB.createStore('animals', (err, theStore) => { 
+            //     if (err) return done(err);
+            //     let createStoreOutput = theStore;
+            //     assert.deepEqual(createStoreOutput, getStoreOutput);
+            //     done();
+            // });
+            fs.readdir(getStoreOutput.directory, (err, data) => {
+                if(err) return done(err);
+                assert.deepEqual(data, []);
             });
 
         });
