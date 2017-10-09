@@ -26,6 +26,9 @@ describe('Stores', () => {
                 if(err) console.error(err);
                 thingId = newObj._id;
             });
+            for(let i= 10000; i >0; i--){
+                //nothing to see here, move along
+            }
         });
 
         it('saves a new object and assigns it an ID', done => {
@@ -34,6 +37,18 @@ describe('Stores', () => {
                 if (error) return done(error);
                 saved = newObj;
                 assert.deepEqual(saved, { name: 'hood', state: 'Oregon', _id : saved._id });
+                done();
+            });
+        });
+
+        it('gets the object with thing ID', done =>{
+            let gotten = null;
+            myStore.get(thingId, (error, newObj) =>{
+                if(error){
+                    return done(error);
+                }
+                gotten = newObj;
+                assert.deepEqual(gotten, {  name: 'thing', description: 'a thing' , _id: gotten._id });
                 done();
             });
         });
