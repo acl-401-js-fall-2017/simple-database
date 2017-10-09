@@ -3,7 +3,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 const Store = require('../lib/store');
-const makeDb = require('../lib/makeDb');
+const Database = require('../lib/makeDb');
 
 
 // const rootDirectory = path.join(__dirname, 'data') //replace data when needed
@@ -130,17 +130,18 @@ describe('simple database', () => {
      
     describe('Db', () => {
         const dbTestRoot = path.join(__dirname, 'dbTestRoot');
-        
+        let db = null;
+
         beforeEach(done =>{
             rimraf(dbTestRoot,err =>{
                 if(err) return done(err);
-                const database = new Database( dbTestRoot);
+                db = new Database(dbTestRoot);
                 done();
             });
         });
 
         it('checks the directory name exist in Db rootdir', (done) => {
-            makeDb.getStore('testName', (err, store) => {
+            db.getStore('testName', (err, store) => {
                 if(err) return done(err);
                 assert.ok(store instanceof Store);
                 assert.equal(store.root, path.join(dbTestRoot, 'testName') );
