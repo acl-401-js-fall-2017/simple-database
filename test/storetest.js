@@ -5,6 +5,7 @@ const mkdirp = require('mkdirp');
 const Store = require('../lib/store');
 const makeDb = require('../lib/makeDb');
 
+
 // const rootDirectory = path.join(__dirname, 'data') //replace data when needed
 
 
@@ -139,9 +140,10 @@ describe('simple database', () => {
         });
 
         it('checks the directory name exist in Db rootdir', (done) => {
-            makeDb.getStore('testName', err => {
+            makeDb.getStore('testName', (err, store) => {
                 if(err) return done(err);
-                assert.ok();
+                assert.ok(store instanceof Store);
+                assert.equal(store.root, path.join(dbTestRoot, 'testName') );
                 done();
             });
         });
