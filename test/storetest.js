@@ -22,6 +22,9 @@ describe('simple database', () => {
         });
     });
 
+    // const cats = null;
+    // const dogs = null;
+
     describe('saves', () => {
     
         it('gets a saved object', (done) => {
@@ -105,18 +108,18 @@ describe('simple database', () => {
             let kitty = { name: 'meow' };
 
             store.save(puppy, (err) => {
-                if(err) return done(err);  
-            });
-            store.save(kitty, (err) => {
                 if(err) return done(err); 
-            });
+                
+                store.save(kitty, (err) => {
+                    if(err) return done(err); 
 
-            store.getAll((err, filesArr) =>{
-                if(err) return done(err);
-                assert.equal(filesArr.length, 2);
-                done();
+                    store.getAll((err, filesArr) =>{
+                        if(err) return done(err);
+                        assert.equal(filesArr.length, 3);
+                        done();
+                    });
+                }); 
             });
-            
         });
     });
 });
