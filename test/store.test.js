@@ -65,4 +65,27 @@ describe('make store', () => {
             });
         });
     });
+    it('should return an array of all objets in the directoy.', done => {
+        store.save(testObject, (err, data)=>{
+            if (err) return done(err);
+            let savedObj1 = data;
+            store.save(testObject, (err, data)=>{
+                let savedObj2 = data;
+                if (err) return done(err);
+                store.save(testObject, (err, data)=>{
+                    let savedObj3 = data;
+                    store.getAll((err, data) =>{
+                        if (err) return done(err);
+                        assert.deepEqual(data, [savedObj1, savedObj2, savedObj3]);
+                        done();
+                    });
+
+                });
+                
+            });
+
+        });
+        
+        
+    });
 });
