@@ -7,13 +7,15 @@ const storeName = (dbName + '/myStore');
 
 
 describe('Stores', () => {
-    //2 describes because get all is not crud;
-    describe('CRUD', () => {
-        let myStore = null;
-        const thing = { name : 'thing', description : 'a thing'};
-        let thingId = null;
-        const mountain = { name : 'hood', state : 'Oregon'};
+    
+    let myStore = null;
+    const thing = { name : 'thing', description : 'a thing'};
+    let thingId = null;
+    const mountain = { name : 'hood', state : 'Oregon'};
 
+    //2 describes because get all is not crud;
+
+    describe('CRUD', () => {
         beforeEach( () => {
             if (fs.existsSync(storeName)) {
                 rimraf(storeName, () => {
@@ -22,14 +24,8 @@ describe('Stores', () => {
             } else {
                 myStore = new Store(storeName);
             }
-            // myStore.save(thing, (err , newObj) => {
-            //     if(err) console.error(err);
-            //     thingId = newObj._id;
-            // });
-            // for(let i= 100000; i >0; i--){
-            //     //nothing to see here, move along
-            // }
         });
+
 
         it('saves a new object and assigns it an ID', done => {
             let saved = null;
@@ -92,5 +88,49 @@ describe('Stores', () => {
         });
     });
 
+    describe('Get all', () => {
+
+        beforeEach(() => {
+            if (fs.existsSync(storeName)) {
+                rimraf(storeName, () => {
+                    myStore = new Store(storeName);
+                });
+            } else {
+                myStore = new Store(storeName);
+            }
+        });
+
+        it.skip('gets all of the object files in the store', done =>{
+            let allObjArr=[];
+
+            myStore.save(thing, (err, newObj) => {
+                if (err) console.error(err);
+                thing._id= newObj._id;
+                myStore.save(mountain, (err, newObj) => {
+                    if (err) console.error(err);
+                    mountain._id = newObj._id;
+
+                    myStore.getAll((err,allObj) =>{
+                        if (err) {
+                            return done(err);
+                        }
+                        allObjArr = allObj;
+                        assert.deepEqual(
+                            allObjArr, 
+                            [
+                                thing,
+                                mountain
+                            ]
+                        );
+                        done();
+        
+                    });
+                });
+            });
+
+
+        });
+
+    });
 
 });
