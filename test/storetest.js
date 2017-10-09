@@ -7,23 +7,23 @@ const Store = require('../lib/store');
 
 // const rootDirectory = path.join(__dirname, 'data') //replace data when needed
 
-describe('saves file', () => {
+describe('database', () => {
     
-    const dataDir = path.join(__dirname, 'dataDir');
+    const test_dir = path.join(__dirname, 'test');
     let store = null;
 
     beforeEach(done => {
-        rimraf( dataDir, err => {
+        rimraf( test_dir, err => {
             if(err) return done(err);
-            mkdirp(dataDir, err => {
+            mkdirp(test_dir, err => {
                 if(err) return done(err);
-                store = new Store(dataDir);
+                store = new Store(test_dir);
                 done();
             });
         });
     });
 
-    it.only('gets a saved object', (done) => {
+    it('gets a saved object', (done) => {
         const puppy = { name: 'fido' };
 
         store.save(puppy, (err, saved) => {
@@ -59,4 +59,6 @@ describe('saves file', () => {
         });
         done();
     });
+
+
 });
