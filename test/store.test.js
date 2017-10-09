@@ -124,6 +124,7 @@ describe('make store', () => {
             fs.readdir(getStoreOutput.directory, (err, data) => {
                 if(err) return done(err);
                 assert.deepEqual(data, []);
+                done();
             });
 
         });
