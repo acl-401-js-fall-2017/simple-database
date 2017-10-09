@@ -11,6 +11,12 @@ let store = null;
 let testObject = {
     name: 'dog'
 };
+let testObject2 = {
+    name: 'cat'
+};
+let testObject3 = {
+    name: 'horse'
+};
 
 describe('make store', () => {
 
@@ -69,12 +75,12 @@ describe('make store', () => {
         store.save(testObject, (err, data)=>{
             if (err) return done(err);
             let savedObj1 = data;
-            store.save(testObject, (err, data)=>{
+            store.save(testObject2, (err, data)=>{
                 let savedObj2 = data;
                 if (err) return done(err);
-                store.save(testObject, (err, data)=>{
+                store.save(testObject3, (err, data)=>{
                     let savedObj3 = data;
-                    store.getAll((err, data) =>{
+                    store.getAll((data, err) =>{
                         if (err) return done(err);
                         assert.deepEqual(data, [savedObj1, savedObj2, savedObj3]);
                         done();
