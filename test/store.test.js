@@ -18,7 +18,7 @@ let testObject3 = {
     name: 'horse'
 };
 
-describe('make store', () => {
+describe('make dB and stores', () => {
 
     beforeEach( done => {//Removes "data" directory if one exists. Creates new "data" directory and a new Store instance. 
         rimraf(rootDirectory, err => {//Removes "data" directory. Invokes create store method on DB class.
@@ -45,35 +45,37 @@ describe('make store', () => {
         }); 
     });
 
+
     it('should get "bad id" return null', done => {
         assert.deepEqual(store.get('bad id', done), null);
     });
 
+
     it('should remove object with id', done => {
         store.save(testObject, (err, savedtestObject) =>{
-            store.remove(savedtestObject._id, (bool, err)=>{
+            store.remove(savedtestObject._id, (err, bool)=>{
                 if (err) return done(err);
                 assert.deepEqual(bool, { removed: true });
                 store.get(savedtestObject._id, (err, data)=>{
                     if (err) return done(err);
                     assert.deepEqual(data, null);
                     done();
-                });
-                
+                });               
             });
-        });
-        
+        });    
     });
+
 
     it('should return remove false when passed bad id', done =>{
         store.save(testObject, ()=>{
-            store.remove('bad id', (bool, err)=>{
+            store.remove('bad id', (err, bool)=>{
                 if (err) return done(err);
                 assert.deepEqual(bool, {removed: false});
                 done();
             });
         });
     });
+
 
     it('getAll() should return an empty array for a newly created store', done => {
         store.getAll((data, err)=>{
@@ -101,37 +103,28 @@ describe('make store', () => {
                         assert.deepEqual(sortedData.sort(), [savedObj1.name, savedObj2.name, savedObj3.name].sort());
                         done();
                     });
-
-                });
-                
+                });               
             });
-
         });
     });
 
  
-    it.skip('getStore should return an instance of the store', done => {
+    it('getStore should return an instance of the store', done => {
         DB.getStore('animals', (err, data) => {
             if (err) return done(err);
             let getStoreOutput = data;
-            console.log('store instance inside of get store', data);
-            // DB.createStore('animals', (err, theStore) => { 
-            //     if (err) return done(err);
-            //     let createStoreOutput = theStore;
-            //     assert.deepEqual(createStoreOutput, getStoreOutput);
-            //     done();
-            // });
             fs.readdir(getStoreOutput.directory, (err, data) => {
                 if(err) return done(err);
                 assert.deepEqual(data, []);
-                assert.deepEqual(getStoreOutput.directory, '/Users/michelegreenwood/codefellows/401/classwork/simple-database/test/data/animals');
+                assert.deepEqual(getStoreOutput.directory, path.join(rootDirectory, 'animals'));
                 done();
             });
         });
     });
 
-    it.only('should create two store instances on unique paths', (done) => {
-        DB.getStore('michele', (err, data) => {
+
+    it('should create two store instances on unique paths', (done) => {
+        DB.getStore('michele', (err, data) => {  //eslint-disable-line
             if(err) return done(err);
             fs.readdir(DB.rootDir, (err, data) => {
                 if(err) return done(err);
