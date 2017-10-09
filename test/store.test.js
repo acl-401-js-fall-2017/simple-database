@@ -91,7 +91,6 @@ describe('make store', () => {
             });
 
         });
-        
-        
     });
+    it('getStore should return an instance of the store')
 });
