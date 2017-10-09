@@ -23,7 +23,7 @@ describe('database', () => {
         });
     });
 
-    it.only('gets a saved object', (done) => {
+    it('gets a saved object', (done) => {
         const puppy = { name: 'fido' };
 
         store.save(puppy, (err, saved) => {
@@ -59,4 +59,6 @@ describe('database', () => {
         });
         done();
     });
+
+
 });
