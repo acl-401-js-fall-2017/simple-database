@@ -76,13 +76,18 @@ describe('make store', () => {
             if (err) return done(err);
             let savedObj1 = data;
             store.save(testObject2, (err, data)=>{
-                let savedObj2 = data;
                 if (err) return done(err);
+                let savedObj2 = data;
                 store.save(testObject3, (err, data)=>{
+                    if (err) return done(err);
                     let savedObj3 = data;
                     store.getAll((data, err) =>{
                         if (err) return done(err);
-                        assert.deepEqual(data, [savedObj1, savedObj2, savedObj3]);
+                        let sortedData = data.map((obj)=>{
+                            return obj.name;
+                        });
+
+                        assert.deepEqual(sortedData.sort(), [savedObj1.name, savedObj2.name, savedObj3.name].sort());
                         done();
                     });
 
@@ -92,5 +97,17 @@ describe('make store', () => {
 
         });
     });
-    it('getStore should return an instance of the store')
+    it.skip('getStore should return an instance of the store', done => {
+        DB.getStore('animals', (err, data) => {
+            if (err) return done(err);
+            let getStoreOutput = data;
+            DB.createStore('animals', (err, theStore) => { 
+                if (err) return done(err);
+                let createStoreOutput = theStore;
+                assert.deepEqual(createStoreOutput, getStoreOutput);
+                done();
+            });
+
+        });
+    });
 });
