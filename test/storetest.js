@@ -8,15 +8,15 @@ const Store = require('../lib/store');
 
 describe('simple database', () => {
     
-    const dataDir = path.join(__dirname, 'dataDir');
+    const root = path.join(__dirname, 'root');
     let store = null;
 
     beforeEach(done => {
-        rimraf( dataDir, err => {
+        rimraf( root, err => {
             if(err) return done(err);
-            mkdirp(dataDir, err => {
+            mkdirp(root, err => {
                 if(err) return done(err);
-                store = new Store(dataDir);
+                store = new Store(root);
                 done();
             });
         });
@@ -65,11 +65,6 @@ describe('simple database', () => {
                 });
             });
         });
-
-        it.skip('fetches all files', (done) => {
-            store.getAll();
-        });
-
     });
 
     describe('removes', () => {
@@ -100,9 +95,28 @@ describe('simple database', () => {
                     done();
                 });
             });
-        });
+        }); 
+    });
 
-        
+    describe('getsAll', () =>{
+
+        it('gets all files created', (done) => {
+            let puppy = { name: 'fido' }; 
+            let kitty = { name: 'meow' };
+
+            store.save(puppy, (err) => {
+                if(err) return done(err);  
+            });
+            store.save(kitty, (err) => {
+                if(err) return done(err); 
+            });
+
+            store.getAll((err, filesArr) =>{
+                if(err) return done(err);
+                assert.equal(filesArr.length, 2);
+                done();
+            });
+            
+        });
     });
 });
-
