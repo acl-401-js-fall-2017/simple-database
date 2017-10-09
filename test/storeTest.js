@@ -52,5 +52,30 @@ describe('Stores', () => {
                 done();
             });
         });
+
+        it('removes object with given ID', done =>{
+            let removed = null;
+            myStore.remove(thingId, (error,status) => {
+                if (error) {
+                    return done(error);
+                }
+                removed = status;
+                assert.deepEqual(removed, {removed : true});
+                done();
+            });
+        });
+
+        it('removes object with given ID', done => {
+            let removed = null;
+            myStore.remove('bad ID', (error, status) => {
+                if (error) {
+                    return done(error);
+                }
+                removed = status;
+                assert.deepEqual(removed, { removed: false });
+                done();
+            });
+        });
+
     });
 });
