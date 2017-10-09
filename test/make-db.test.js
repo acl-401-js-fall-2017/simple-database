@@ -4,7 +4,7 @@ const rimraf = require('rimraf');
 const path = require('path');
 const Store = require('../lib/store');
 
-describe.only('create root directories', () => {
+describe('create root directories', () => {
     let db = null;
     const testRootDir = path.join(__dirname, 'data');
 
