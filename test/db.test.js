@@ -1,20 +1,28 @@
-// eslint-disable-next-line
-const assert = require('assert');
-// eslint-disable-next-line
 const MakeDb = require('../lib/db.js');
+const Store = require('../lib/store');
+const path = require('path');
+const rimraf = require('rimraf');
+const assert = require('assert');
 
 
 describe('db test functions', () =>{
-    // eslint-disable-next-line
     let db = null;
+    const testDir = path.join(__dirname, 'test-file');
 
-    beforeEach( () => {
-        db = new MakeDb;
+    beforeEach( done => {
+        rimraf( testDir, err => {
+            if(err) return done(err);
+            db = new MakeDb(testDir);
+            done();
+        });
     });
 
-    describe('Save', () => {
-        it('Saves File Name', () =>{
+    it('checks for instances of stores', done => {
 
+        db.getStore('StoreName', (err, createdStore) => {
+            if(err) return done(err);
+            assert.ok(createdStore instanceof Store);
+            done();
         });
     });
 
