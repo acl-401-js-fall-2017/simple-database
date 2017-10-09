@@ -4,7 +4,7 @@ const path = require('path');
 const rootDirectory = path.join(__dirname, 'data');
 const DB = new MakeDB(rootDirectory);
 const rimraf = require('rimraf');
-
+const fs = require('fs');
 
 //Gives store and testObject global scope. 
 let store = null;
@@ -31,29 +31,30 @@ describe('make store', () => {
         });
     });
     
-   
 
     it('should get saved object', done => {
         store.save(testObject,(err, savedtestObject) => {
             if (err) return done(err);
             assert.ok(savedtestObject._id);
             assert.equal(savedtestObject.name, testObject.name);
-            store.get(savedtestObject._id, (gottestObject, err) => {
+            store.get(savedtestObject._id, (err, gottestObject) => {
                 if (err) return done(err);
                 assert.deepEqual(gottestObject, savedtestObject);
                 done();
             });
         }); 
     });
+
     it('should get "bad id" return null', done => {
         assert.deepEqual(store.get('bad id', done), null);
     });
+
     it('should remove object with id', done => {
         store.save(testObject, (err, savedtestObject) =>{
             store.remove(savedtestObject._id, (bool, err)=>{
                 if (err) return done(err);
                 assert.deepEqual(bool, { removed: true });
-                store.get(savedtestObject._id, (data, err)=>{
+                store.get(savedtestObject._id, (err, data)=>{
                     if (err) return done(err);
                     assert.deepEqual(data, null);
                     done();
@@ -63,15 +64,26 @@ describe('make store', () => {
         });
         
     });
+
     it('should return remove false when passed bad id', done =>{
-        store.save(testObject, (err, savedtestObject)=>{
+        store.save(testObject, ()=>{
             store.remove('bad id', (bool, err)=>{
+                if (err) return done(err);
                 assert.deepEqual(bool, {removed: false});
                 done();
             });
         });
     });
-    it('should return an array of all objets in the directoy.', done => {
+
+    it('getAll() should return an empty array for a newly created store', done => {
+        store.getAll((data, err)=>{
+            if (err) return done(err);
+            assert.deepEqual(data, []);
+            done();
+        });
+    });
+
+    it('should return an array of all objects in the directoy.', done => {
         store.save(testObject, (err, data)=>{
             if (err) return done(err);
             let savedObj1 = data;
@@ -96,15 +108,8 @@ describe('make store', () => {
 
         });
     });
-    it('getAll() should return an empty array for a newly created store', done => {
-        store.getAll((data, err)=>{
-            if (err) return done(err);
-            console.log('I am err inside of get ALLtest', err);
-            console.log('I am data inside of get ALLtest', data);
-            assert.deepEqual(data, []);
-            done();
-        });
-    });
+
+ 
     it.skip('getStore should return an instance of the store', done => {
         DB.getStore('animals', (err, data) => {
             if (err) return done(err);
