@@ -3,11 +3,39 @@ const Store = require('../lib/store.js');
 const fs = require('fs');
 const rimraf = require('rimraf');
 const dbName = (__dirname + '/db');
-const storeName = (__dirname + '/animaltest');
+const storeName = (dbName + '/myStore');
+
 
 describe('Stores', () => {
+    //2 describes because get all is not crud;
     describe('CRUD', () => {
+        let myStore = null;
+        const thing = { name : 'thing', description : 'a thing'};
+        let thingId = null;
+        const mountain = { name : 'hood', state : 'Oregon'};
 
+        beforeEach( () => {
+            if (fs.existsSync(storeName)) {
+                rimraf(storeName, () => {
+                    myStore = new Store(storeName);
+                });
+            } else {
+                myStore = new Store(storeName);
+            }
+            myStore.save(thing, (err , newObj) => {
+                if(err) console.error(err);
+                thingId = newObj._id;
+            });
+        });
 
+        it('saves a new object and assigns it an ID', done => {
+            let saved = null;
+            myStore.save(mountain, (error, newObj) => {
+                if (error) return done(error);
+                saved = newObj;
+                assert.deepEqual(saved, { name: 'hood', state: 'Oregon', _id : saved._id });
+                done();
+            });
+        });
     });
 });
