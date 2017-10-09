@@ -110,7 +110,7 @@ describe('make store', () => {
     });
 
  
-    it.only('getStore should return an instance of the store', done => {
+    it.skip('getStore should return an instance of the store', done => {
         DB.getStore('animals', (err, data) => {
             if (err) return done(err);
             let getStoreOutput = data;
@@ -127,7 +127,18 @@ describe('make store', () => {
                 assert.deepEqual(getStoreOutput.directory, '/Users/michelegreenwood/codefellows/401/classwork/simple-database/test/data/animals');
                 done();
             });
+        });
+    });
 
+    it.only('should create two store instances on unique paths', (done) => {
+        DB.getStore('michele', (err, data) => {
+            if(err) return done(err);
+            fs.readdir(DB.rootDir, (err, data) => {
+                if(err) return done(err);
+                let sortedPathNames = data.sort();
+                assert.deepEqual(sortedPathNames, ['michele', 'testerSHane']);
+                done();
+            });
         });
     });
 });
