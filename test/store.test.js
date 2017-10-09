@@ -4,7 +4,7 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const Store = require('../lib/store');
 
-describe.only('creating store dir', () => {
+describe('creating store dir', () => {
     let store = null;
     const testDir = path.join(__dirname, 'test-file');
     
