@@ -116,7 +116,6 @@ describe('Stores', () => {
                             return done(err);
                         }
                         allObjArr = allObj;
-                        console.log('=============' + allObjArr);
                         assert.ok(
                             deepequal(allObjArr, [ thing, mountain]) ||
                             deepequal(allObjArr, [mountain, thing] ) 
