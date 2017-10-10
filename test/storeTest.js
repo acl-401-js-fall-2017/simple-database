@@ -4,6 +4,7 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 const dbName = (__dirname + '/db');
 const storeName = (dbName + '/myStore');
+const deepequal = require('deep-equal');
 
 
 describe('Stores', () => {
@@ -115,12 +116,11 @@ describe('Stores', () => {
                             return done(err);
                         }
                         allObjArr = allObj;
-                        assert.deepEqual(
-                            allObjArr, 
-                            [
-                                thing,
-                                mountain
-                            ]
+                        console.log('=============' + allObjArr);
+                        assert.ok(
+                            deepequal(allObjArr, [ thing, mountain]) ||
+                            deepequal(allObjArr, [mountain, thing] ) 
+                            
                         );
                         done();
         

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ABodey/simple-database#readme",
   "devDependencies": {
+    "deep-equal": "^1.0.1",
     "eslint": "^4.8.0",
     "mocha": "^4.0.1"
   },
