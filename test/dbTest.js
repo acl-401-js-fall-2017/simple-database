@@ -29,4 +29,10 @@ describe('DataBase', () =>{
         assert.ok(fs.existsSync(dbName));
     });
 
+    it('creates a store & gives a directory',(done) =>{
+        freshDB.getStore('animals',(err) =>{
+
+        });
+    });
+
 });
