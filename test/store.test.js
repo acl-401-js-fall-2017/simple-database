@@ -1,6 +1,6 @@
 const assert = require('assert');
-const rimraf = require('rimraf');
-const mkdirp = require('mkdirp');
+const rimraf = promisify(require('rimraf'));
+// const mkdirp = promisify(require('mkdirp'));
 const Store = require('../lib/store');
 const path = require('path');
 
@@ -9,18 +9,12 @@ describe('create storeDir name', () => {
     const testDir = path.join(__dirname, 'data');
 
     // clear any instances of Store and make new file prior to running each test
-    beforeEach(done => {
-        rimraf(testDir, err => {
-            if(err) return done(err);
-            mkdirp(testDir, err => {
-                if(err) return done(err);
-                store = new Store(testDir);
-                done();
-            });
-        });
+    beforeEach(() => {
+        rimraf(testDir); 
+        store = new Store(testDir);
     });
     
-    it('gets a saved obj', done => {
+    it('gets a saved obj', () => {
         const obj = {name: 'Kate'};
 
         store.save(obj, (err, savedObj) => {
