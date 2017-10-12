@@ -51,63 +51,43 @@ describe('simple database', () => {
                 .then(animal => {
                     assert.equal(animal.name, newAnimal.name);
                 });
-
-
-
-            // store.save(puppy, (err, savedObj) => {
-            //     if(err) return done(err);
-                
-            //     store.get(savedObj._id, (err, fetchedObj) => {
-            //         if(err) return done(err);
-            //         assert.deepEqual(fetchedObj, savedObj); //deepEqual because comparing objects
-            //         done();
-            //     });
-            // });
         });
 
-        it('returns null with false id', (done) => {
-            const puppy = { name: 'fido' };
-    
-            store.save(puppy, (err, savedObj) => {
-                if(err) return done(err);
-                
-                store.get('bad_id', (err, fetchedObj) => {
-                    if(err) return done(err);
-                    assert.equal(fetchedObj, null);
-                    done();
+        it('returns null with false id', () => {
+            return animals.get('bad-id')
+                .then(animal => {
+                    assert.equal(animal, null);
                 });
-            });
         });
+    
+
+
     });
 
     describe('removes', () => {
         
-        it('removes the file of the object with that id', (done) => {
-            const puppy = { name: 'fido' };
-        
-            store.save(puppy, (err, savedObj) => {
-                if(err) return done(err);
-                
-                store.remove(savedObj._id, (err, status) => {
-                    if (err) return done(err);
-                    assert.deepEqual(status, { removed: true}); //deepEqual because comparing objects
-                    done();
+        it('removes the file of the object with that id', () => {
+            let newAnimal = { name: 'fido'};
+
+            return animals.save(newAnimal)
+                .then(animal => animals.remove(animal._id))
+                .then( status => {
+                    assert.deepEqual(status, { removed: true }   );
+                    
                 });
-            });
+            
         });
 
-        it('returns {removed: false} for invalid id', (done) => {
-            const puppy = { name: 'fido' };
-        
-            store.save(puppy, (err, savedObj) => {
-                if(err) return done(err);
-                
-                store.remove('bad_id', (err, status) => {
-                    if (err) return done(err);
-                    assert.deepEqual(status, { removed: false}); //deepEqual because comparing objects
-                    done();
+        it.only('returns {removed: false} for invalid id', () => {
+            let newAnimal = { name: 'fido' };
+
+            return animals.save(newAnimal)
+                .then(animal => animals.remove(animal))
+                .then( status => {
+                    assert.deepEqual( status, { removed: false } );
                 });
-            });
+        
+        
         }); 
     });
 
