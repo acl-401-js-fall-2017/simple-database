@@ -70,7 +70,7 @@ describe('Store:', () => {
         });
 
         describe('get method', () => {
-            it('returns the object with the given id', () => {
+            it('returns the object with the given extant id', () => {
                 return newStore.get(lionKing._id)
                     .then(obj => {
                         assert.deepEqual(obj, lionKing);    // to check that the objects are equivalent
@@ -86,7 +86,20 @@ describe('Store:', () => {
             });
         });
 
-
+        describe('remove', () => {
+            it('returns {removed: true} when given extant id', () => {
+                return newStore.remove(lionKing._id)
+                    .then(obj => {
+                        assert.deepEqual(obj, {removed: true});
+                    });
+            });
+            
+            it('returns {removed: false} when given bad id', () => {
+                return newStore.remove(lionKing._id)
+                    .then(obj => {
+                        assert.deepEqual(obj, {removed: false});
+                    });
+            });
+        });
     });
-
 });
