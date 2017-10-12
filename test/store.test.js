@@ -52,11 +52,11 @@ describe('make dB and stores', () => {
 
 
     it('should remove object with id', done => {
-        store.save(testObject, (err, savedtestObject) =>{
-            store.remove(savedtestObject._id, (err, bool)=>{
+        store.save(testObject, (err, savedtestObject) => {
+            store.remove(savedtestObject._id, (err, bool) => {
                 if (err) return done(err);
                 assert.deepEqual(bool, { removed: true });
-                store.get(savedtestObject._id, (err, data)=>{
+                store.get(savedtestObject._id, (err, data) => {
                     if (err) return done(err);
                     assert.deepEqual(data, null);
                     done();
@@ -67,12 +67,10 @@ describe('make dB and stores', () => {
 
 
     it('should return remove false when passed bad id', done =>{
-        store.save(testObject, ()=>{
-            store.remove('bad id', (err, bool)=>{
-                if (err) return done(err);
-                assert.deepEqual(bool, {removed: false});
-                done();
-            });
+        store.remove('bad id', (err, bool)=>{
+            if (err) return done(err);
+            assert.deepEqual(bool, {removed: false});
+            done();
         });
     });
 
