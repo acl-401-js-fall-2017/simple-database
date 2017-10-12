@@ -109,7 +109,10 @@ describe('Store:', () => {
             it('returns an array of all objects in the file system', () => {
                 return newStore.getAll()
                     .then(output => {
-                        // assert.include(output.)
+                        assert.equal(output.length, 3);
+                        assert.deepInclude(output, lionKing),
+                        assert.deepInclude(output, mulan),
+                        assert.deepInclude(output, moana)
                     });
             });
         });
