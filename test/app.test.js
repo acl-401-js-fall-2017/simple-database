@@ -1,11 +1,13 @@
 
 const app = require('../lib/app');
-const {promisify} = require('util');
 const chai = require('chai');
 const assert = chai.assert;
 const rimraf = require('rimraf');
 const path = require('path');
 const Store = require('../lib/Store');
+
+const {promisify} = require('util');
+const readFileAsync = promisify(require('fs').readFile);
 
 const storeDir = path.join(__dirname, 'testStore');
 
@@ -36,7 +38,15 @@ describe('Store:', () => {
                 const jungleBook = { title: 'the Jungle Book', year: '1967' };
                 newStore.save(jungleBook)
                     .then(savedObj => {
-                        assert.deepEqual(savedObj, { title: 'the Jungle Book', year: '1967', id: savedObj._id });
+                        const expectedObj = { title: 'the Jungle Book', year: '1967', _id: savedObj._id };
+                        assert.deepEqual(savedObj, expectedObj);
+                        assert.ok(savedObj !== jungleBook);
+                        console.log(path.join(newStore.path, savedObj._id));
+                        return readFileAsync(path.join(newStore.path, savedObj._id), 'utf8')
+                            .then((data, err) => {
+                                if(err) throw err;
+                                assert.deepEqual(JSON.parse(data), expectedObj);
+                            });
                     });
             });
         });
