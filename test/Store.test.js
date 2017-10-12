@@ -104,7 +104,7 @@ describe('Store:', () => {
         });
 
         describe('get all method', () => {
-            it.skip('returns an array of all objects in the file system', () => {
+            it('returns an array of all objects in the file system', () => {
                 return newStore.getAll()
                     .then(output => {
                         assert.equal(output.length, 3);
