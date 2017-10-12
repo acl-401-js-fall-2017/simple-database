@@ -40,11 +40,11 @@ describe('Store:', () => {
                 newStore.save({ title: 'Moana', year: '2016'})
             ];
             return Promise.all(savePromiseArr)
-            .then(savedArr => {
-                lionKing = savedArr[0];
-                mulan = savedArr[1];
-                moana = savedArr[2];
-            });
+                .then(savedArr => {
+                    lionKing = savedArr[0];
+                    mulan = savedArr[1];
+                    moana = savedArr[2];
+                });
         });
         
         afterEach(() => {
