@@ -35,7 +35,7 @@ describe('create storeDir name', () => {
     });
 
 
-    it('removes files by id', () => {
+    it.skip('removes files by id', () => {
         const obj = {name: 'Kate'};
         
         return store.save(obj)
