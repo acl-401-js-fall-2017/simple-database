@@ -33,29 +33,22 @@ describe('make dB and stores', () => {
     
 
     
-    //     beforeEach( done => {//Removes "data" directory if one exists. Creates new "data" directory and a new Store instance. 
-    //     rimraf(rootDirectory, err => {//Removes "data" directory. Invokes create store method on DB class.
-    //            if (err) return done(err);
-    //            DB.createStore('testerSHane', (err, theStore) => {//Creates an assigins new Store to "store variable" invokes done() 
-    //                if (err) return done(err);
-    //                store = theStore;
-    //                done();
-    //            });
-    //        });
-    //    });
 
-    it('should get saved object', done => {
-        store.save(testObject, (err, savedtestObject) => {
-            if (err) return done(err);
-            assert.ok(savedtestObject._id);
-            assert.equal(savedtestObject.name, testObject.name);
-            store.get(savedtestObject._id, (err, gottestObject) => {
-                if (err) return done(err);
-                assert.deepEqual(gottestObject, savedtestObject);
-                done();
+    it('should get saved object', () => {
+        store.save(testObject)
+            .then((savedtestObject) => {
+                return savedtestObject;
+            })
+            .then((savedtestObject) => {
+                assert.ok(savedtestObject._id);
+                assert.equal(savedtestObject.name, testObject.name);
+                store.get(savedtestObject._id, (err, gottestObject) => {
+                    assert.deepEqual(gottestObject, savedtestObject);
+                });
+
             });
-        }); 
     });
+
 
 
     it('should get "bad id" return null', done => {
