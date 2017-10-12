@@ -77,7 +77,16 @@ describe('Store:', () => {
                         assert.notEqual(obj, lionKing);     // but not the same reference
                     });
             });
+            
+            it('returns null when given a bad id', () => {
+                return newStore.get('bad id!')
+                    .then(obj => {
+                        assert.equal(obj, null);   
+                    });
+            });
         });
+
+
     });
 
 });
