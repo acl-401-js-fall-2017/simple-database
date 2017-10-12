@@ -1,6 +1,7 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const promisify = require('util').promisify;
+const rimraf = promisify(require('rimraf'));
 const mkdirp = require('mkdirp');
 const Store = require('../lib/store');
 const Database = require('../lib/makeDb');
@@ -14,16 +15,26 @@ describe('simple database', () => {
     const root = path.join(__dirname, 'root');
     let store = null;
 
-    beforeEach(done => {
-        rimraf( root, err => {
-            if(err) return done(err);
-            mkdirp(root, err => {
-                if(err) return done(err);
-                store = new Store(root);
+    // beforeEach(done => {
+    //     rimraf( root, err => {
+    //         if(err) return done(err);
+    //         mkdirp(root, err => {
+    //             if(err) return done(err);
+    //             store = new Store(root);
 
-                done();
+    //             done();
+    //         });
+    //     });
+    // });
+
+    beforeEach( () => {
+        return rimraf(root)
+            .then( () => {
+                return mkdirp(root);
+            })
+            .then( () => {
+                store = new Store(root);
             });
-        });
     });
 
 
