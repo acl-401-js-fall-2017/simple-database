@@ -38,20 +38,18 @@ describe('Store:', () => {
         });
 
         beforeEach(() => {
-            newStore.save({ title: 'the Lion King', year: '1994' })
-                .then(savedObj => {
-                    lionKing = savedObj;
+            const savePromiseArr = [
+                newStore.save({ title: 'the Lion King', year: '1994' }),
+                newStore.save({ title: 'Mulan', year: '1998' }),
+                newStore.save({ title: 'Moana', year: '2016'})
+            ];
+            return Promise.all(savePromiseArr)
+                .then(savedArr => {
+                    lionKing = savedArr[0];
+                    mulan = savedArr[1];
+                    moana = savedArr[2];
                 });
 
-            newStore.save({ title: 'Mulan', year: '1998' })
-                .then(savedObj => {
-                    mulan = savedObj;
-                });
-
-            newStore.save({ title: 'Moana', year: '2016'})
-                .then(savedObj => {
-                    moana = savedObj;
-                });
         });
 
         describe('save method', () => {
@@ -74,7 +72,7 @@ describe('Store:', () => {
 
         describe('get method', () => {
             it('returns the object with the given id', () => {
-
+                console.log(lionKing, mulan, moana);
             });
         });
     });
