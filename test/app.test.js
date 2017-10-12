@@ -31,12 +31,8 @@ describe('Store:', () => {
 
         before(() => {
             newStore = new Store(storeDir);
-            return rimrafAsync(newStore.path)
-                .then(() => {
-                    mkdirAsync(newStore.path);
-                });
         });
-
+        
         beforeEach(() => {
             const savePromiseArr = [
                 newStore.save({ title: 'the Lion King', year: '1994' }),
@@ -44,12 +40,18 @@ describe('Store:', () => {
                 newStore.save({ title: 'Moana', year: '2016'})
             ];
             return Promise.all(savePromiseArr)
-                .then(savedArr => {
-                    lionKing = savedArr[0];
-                    mulan = savedArr[1];
-                    moana = savedArr[2];
+            .then(savedArr => {
+                lionKing = savedArr[0];
+                mulan = savedArr[1];
+                moana = savedArr[2];
+            });
+        });
+        
+        afterEach(() => {
+            return rimrafAsync(newStore.path)
+                .then(() => {
+                    mkdirAsync(newStore.path);
                 });
-
         });
 
         describe('save method', () => {
@@ -86,10 +88,11 @@ describe('Store:', () => {
             });
         });
 
-        describe('remove', () => {
+        describe('remove method', () => {
             it('returns {removed: true} when given extant id', () => {
                 return newStore.remove(lionKing._id)
                     .then(obj => {
+                        console.log('removed: ',lionKing._id);
                         assert.deepEqual(obj, {removed: true});
                     });
             });
@@ -98,6 +101,15 @@ describe('Store:', () => {
                 return newStore.remove('bad id!')
                     .then(obj => {
                         assert.deepEqual(obj, {removed: false});
+                    });
+            });
+        });
+
+        describe('get all method', () => {
+            it('returns an array of all objects in the file system', () => {
+                return newStore.getAll()
+                    .then(output => {
+                        // assert.include(output.)
                     });
             });
         });
