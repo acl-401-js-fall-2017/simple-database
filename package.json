@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "lib": "lib",
     "pretest": "npm run lint",
-    "test": "MOCHA_REPORTER_STACK_EXCLUDE=**/** mocha --reporter mocha-better-spec-reporter",
+    "test": "mocha",
     "test:callstack": "mocha",
     "start": "npm run test -- -w"
   },
