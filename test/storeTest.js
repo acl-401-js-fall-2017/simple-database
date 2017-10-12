@@ -1,10 +1,17 @@
 const assert = require('assert');
 const Store = require('../lib/store.js');
 const fs = require('fs');
-const rimraf = require('rimraf');
+const promisify = require('util').promisify;
+const rimraf = promisify(require('rimraf'));
 const dbName = (__dirname + '/db');
 const storeName = (dbName + '/myStore');
 const deepequal = require('deep-equal');
+const { readdir } = require('../lib/fsp');
+const { writeFile } = require('../lib/fsp');
+const mkdirp = promisify(require('mkdirp'));
+const Db = require('../lib/db.js');
+
+
 
 
 describe('Stores', () => {
@@ -18,24 +25,36 @@ describe('Stores', () => {
 
     describe('CRUD', () => {
         beforeEach( () => {
-            if (fs.existsSync(storeName)) {
-                rimraf(storeName, () => {
-                    myStore = new Store(storeName);
+            return rimraf(storeName)
+                .then(() =>{
+                    return mkdirp(storeName);
+                })
+                .then(() => {
+                    return writeFile('/myStore');
                 });
-            } else {
-                myStore = new Store(storeName);
-            }
+
+            // freshDB = new Db(__dirname, done)
+            // if (fs.existsSync(storeName)) {
+            //     rimraf(storeName, () => {
+            //         myStore = new Store(storeName);
+            //     });
+            // } else {
+            //     myStore = new Store(storeName);
+            // }
         });
 
 
-        it('saves a new object and assigns it an ID', done => {
+        it('saves a new object and assigns it an ID', () => {
             let saved = null;
-            myStore.save(mountain, (error, newObj) => {
-                if (error) return done(error);
-                saved = newObj;
-                assert.deepEqual(saved, { name: 'hood', state: 'Oregon', _id : saved._id });
-                done();
-            });
+            myStore.save(mountain)
+                .then(_saved =>{
+                    saved = _saved;
+                    assert.equal(saved.name, 'hood');
+                    return myStore.get(saved._id);
+                })
+                .then( item =>{
+                    assert.equal(item, saved);
+                });
         });
 
         it('gets the object with thing ID', done =>{
