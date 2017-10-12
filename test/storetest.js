@@ -4,7 +4,7 @@ const promisify = require('util').promisify;
 const rimraf = promisify(require('rimraf'));
 const mkdirp = require('mkdirp');
 const Store = require('../lib/store');
-const Database = require('../lib/makeDb');
+const db = require('../lib/db');
 
 
 // const rootDirectory = path.join(__dirname, 'data') //replace data when needed
@@ -12,44 +12,40 @@ const Database = require('../lib/makeDb');
 
 describe('simple database', () => {
     
-    const root = path.join(__dirname, 'root');
-    let store = null;
+    const test_dir = path.join(__dirname, 'test-data');
+    // let store = null;
+    let animals = null;
+    let buildings = null;
 
-    // beforeEach(done => {
-    //     rimraf( root, err => {
-    //         if(err) return done(err);
-    //         mkdirp(root, err => {
-    //             if(err) return done(err);
-    //             store = new Store(root);
+    beforeEach(() => rimraf(test_dir));
 
-    //             done();
-    //         });
-    //     });
-    // });
-
-    beforeEach( () => {
-        return rimraf(root)
-            .then( () => {
-                return mkdirp(root);
-            })
-            .then( () => {
-                store = new Store(root);
-            });
-    });
+    beforeEach(() => {
+        db.rootDir = test_dir;
+        return db.createTable('animals')
+            .then(db => animals = db);
+    })
+            
+    
 
 
     describe('saves', () => {
     
-        it('gets a saved object', (done) => {
-            const puppy = { name: 'fido' };
+        it.only('gets a saved object', () => {
+            let newAnimal = { name: 'fido', type: 'puppy' };
+
+            return animals.save(newAnimal)
+                .then(animal => {
+                    assert.equal(animal.name, newAnimal.name);
+
+                });
 
 
-            store.save(puppy, (err, savedObj) => {
-                if(err) return done(err);
-                assert.ok(savedObj._id);
-                assert.equal(savedObj.name, puppy.name);
-                done();
-            });
+            // store.save(puppy, (err, savedObj) => {
+            //     if(err) return done(err);
+            //     assert.ok(savedObj._id);
+            //     assert.equal(savedObj.name, puppy.name);
+            //     done();
+            // });
         });
     });
 
