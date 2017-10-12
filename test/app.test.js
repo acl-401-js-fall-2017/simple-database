@@ -2,12 +2,14 @@
 const app = require('../lib/app');
 const chai = require('chai');
 const assert = chai.assert;
-const rimraf = require('rimraf');
 const path = require('path');
 const Store = require('../lib/Store');
+const fs = require('fs');
 
 const {promisify} = require('util');
-const readFileAsync = promisify(require('fs').readFile);
+const rimrafAsync = promisify(require('rimraf'));
+const readFileAsync = promisify(fs.readFile);
+const mkdirAsync = promisify(fs.mkdir);
 
 const storeDir = path.join(__dirname, 'testStore');
 
@@ -26,11 +28,30 @@ describe('Store:', () => {
         let lionKing = null;
         let mulan = null;
         let moana = null;
-        beforeEach(() => {
+
+        before(() => {
             newStore = new Store(storeDir);
-            lionKing = { title: 'the Lion King', year: '1994' };
-            mulan = { title: 'Mulan', year: '1998' };
-            moana = { title: 'Moana', year: '2016'};
+            return rimrafAsync(newStore.path)
+                .then(() => {
+                    mkdirAsync(newStore.path);
+                });
+        });
+
+        beforeEach(() => {
+            newStore.save({ title: 'the Lion King', year: '1994' })
+                .then(savedObj => {
+                    lionKing = savedObj;
+                });
+
+            newStore.save({ title: 'Mulan', year: '1998' })
+                .then(savedObj => {
+                    mulan = savedObj;
+                });
+
+            newStore.save({ title: 'Moana', year: '2016'})
+                .then(savedObj => {
+                    moana = savedObj;
+                });
         });
 
         describe('save method', () => {
@@ -48,6 +69,12 @@ describe('Store:', () => {
                                 assert.deepEqual(JSON.parse(data), expectedObj);
                             });
                     });
+            });
+        });
+
+        describe('get method', () => {
+            it('returns the object with the given id', () => {
+
             });
         });
     });
