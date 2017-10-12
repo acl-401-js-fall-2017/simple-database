@@ -1,13 +1,13 @@
 const assert = require('assert');
+const promisify = require('util').promisify;
 const MakeDB = require('../lib/make-db');
 const path = require('path');
 const rootDirectory = path.join(__dirname, 'data');
 const DB = new MakeDB(rootDirectory);
-const rimraf = require('rimraf');
+const rimraf = promisify(require('rimraf'));
 const fs = require('fs');
 
 //Gives store and testObject global scope. 
-let store = null;
 let testObject = {
     name: 'dog'
 };
@@ -19,31 +19,60 @@ let testObject3 = {
 };
 
 describe('make dB and stores', () => {
-
-    beforeEach( done => {//Removes "data" directory if one exists. Creates new "data" directory and a new Store instance. 
-        rimraf(rootDirectory, err => {//Removes "data" directory. Invokes create store method on DB class.
-            if (err) return done(err);
-            DB.createStore('testerSHane', (err, theStore) => {//Creates an assigins new Store to "store variable" invokes done() 
-                if (err) return done(err);
-                store = theStore;
-                done();
-            });
-        });
-    });
+    let store = null;
     
-
-    it('should get saved object', done => {
-        store.save(testObject,(err, savedtestObject) => {
-            if (err) return done(err);
-            assert.ok(savedtestObject._id);
-            assert.equal(savedtestObject.name, testObject.name);
-            store.get(savedtestObject._id, (err, gottestObject) => {
-                if (err) return done(err);
-                assert.deepEqual(gottestObject, savedtestObject);
-                done();
+    
+    
+    // beforeEach( done => {
+    //     rimraf(rootDirectory, err => {
+    //         if (err) return done(err);
+    //         DB.createStore('testerSHane', (err, theStore) => { 
+    //             if (err) return done(err);
+    //             store = theStore;
+    //             done();
+    //         });
+    //     });
+    // });
+                
+    beforeEach( () => {
+        return rimraf(rootDirectory)
+            .then (() => {
+                return DB.createStore('testerSHane');
+            })
+            .then ((theStore) => {
+                store = theStore;
             });
-        }); 
     });
+
+
+
+    it('should get saved object', () => {
+        return store.save(testObject) 
+            .then ((testObject) => {
+                assert.ok(savedtestObject._id);
+                assert.equal(savedtestObject.name, testObject.name);
+            })
+            .then (() => {
+                store.get(savedtestObject._id) 
+            })
+            .then (() => {
+                assert.deepEqual(gottestObject, savedtestObject);
+            }); 
+    });
+
+
+    // it('should get saved object', done => {
+    //     store.save(testObject,(err, savedtestObject) => {
+    //         if (err) return done(err);
+    //         assert.ok(savedtestObject._id);
+    //         assert.equal(savedtestObject.name, testObject.name);
+    //         store.get(savedtestObject._id, (err, gottestObject) => {
+    //             if (err) return done(err);
+    //             assert.deepEqual(gottestObject, savedtestObject);
+    //             done();
+    //         });
+    //     }); 
+    // });
 
 
     it('should get "bad id" return null', done => {
