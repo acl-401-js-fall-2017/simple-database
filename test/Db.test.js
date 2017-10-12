@@ -36,13 +36,22 @@ describe('DB', () => {
 
     describe('getStore method', () => {
         it('creates a Store object and creates/assigns it a directory', () => {
-            return testDb.getStore('disneyMovs')
-                .test(newStore => {
-                    assert.ok(newStore instanceof Store);
-                    return readDirAsync(this.path);
+            const getStoreArr = [
+                testDb.getStore('disneyMovs'),
+                testDb.getStore('target')
+            ];
+            return Promise.all(getStoreArr)
+                .then(newStoreArr => {
+                    newStoreArr.forEach(store => {
+                        assert.ok(store instanceof Store);
+                    });
+                    return readDirAsync(testDb.path);
                 })
-                .test(storeArr => {
-                    console.log(storeArr);
+                .then(storeArr => {
+                    assert.ok(
+                        storeArr.includes('disneyMovs') &&
+                        storeArr.includes('target')
+                    );
                 });
         });
     });
