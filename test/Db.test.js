@@ -8,8 +8,9 @@ const fs = require('fs');
 
 const {promisify} = require('util');
 const rimrafAsync = promisify(require('rimraf'));
-const readFileAsync = promisify(fs.readFile);
 const mkdirAsync = promisify(fs.mkdir);
+const readDirAsync = promisify(fs.readdir);
+
 
 const dbPath = path.join(__dirname, 'testDb');
 
@@ -33,5 +34,16 @@ describe('DB', () => {
         });
     });
 
-
+    describe('getStore method', () => {
+        it('creates a Store object and creates/assigns it a directory', () => {
+            return testDb.getStore('disneyMovs')
+                .test(newStore => {
+                    assert.ok(newStore instanceof Store);
+                    return readDirAsync(this.path);
+                })
+                .test(storeArr => {
+                    console.log(storeArr);
+                });
+        });
+    });
 });
