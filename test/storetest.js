@@ -30,7 +30,7 @@ describe('simple database', () => {
 
     describe('saves', () => {
     
-        it.only('gets a saved object', () => {
+        it('gets a saved object', () => {
             let newAnimal = { name: 'fido', type: 'puppy' };
 
             return animals.save(newAnimal)
@@ -38,31 +38,31 @@ describe('simple database', () => {
                     assert.equal(animal.name, newAnimal.name);
 
                 });
-
-
-            // store.save(puppy, (err, savedObj) => {
-            //     if(err) return done(err);
-            //     assert.ok(savedObj._id);
-            //     assert.equal(savedObj.name, puppy.name);
-            //     done();
-            // });
         });
     });
 
     describe('gets', () => {
         
-        it('retrieves saved object with given id', (done) => {
-            const puppy = { name: 'fido' };
-    
-            store.save(puppy, (err, savedObj) => {
-                if(err) return done(err);
-                
-                store.get(savedObj._id, (err, fetchedObj) => {
-                    if(err) return done(err);
-                    assert.deepEqual(fetchedObj, savedObj); //deepEqual because comparing objects
-                    done();
+        it('gets saved object with given id', () => {
+            let newAnimal = { name: 'fido' };
+            
+            return animals.save(newAnimal)
+                .then(animal => animals.get(animal._id))
+                .then(animal => {
+                    assert.equal(animal.name, newAnimal.name);
                 });
-            });
+
+
+
+            // store.save(puppy, (err, savedObj) => {
+            //     if(err) return done(err);
+                
+            //     store.get(savedObj._id, (err, fetchedObj) => {
+            //         if(err) return done(err);
+            //         assert.deepEqual(fetchedObj, savedObj); //deepEqual because comparing objects
+            //         done();
+            //     });
+            // });
         });
 
         it('returns null with false id', (done) => {
