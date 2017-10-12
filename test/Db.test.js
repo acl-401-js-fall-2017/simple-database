@@ -16,10 +16,22 @@ const dbPath = path.join(__dirname, 'testDb');
 describe('DB', () => {
     let testDb = null;
 
+    before(() => {
+        testDb = new Db(dbPath);
+    });
+
+    after(() => {
+        return rimrafAsync(dbPath)
+            .then(() => {
+                return mkdirAsync(dbPath);
+            });
+    });
+
     describe('Constructor', () => {
         it('creates a Db object with a store', () => {
-            testDb = new Db(dbPath);
             assert.ok(testDb instanceof Db);
         });
     });
+
+
 });
