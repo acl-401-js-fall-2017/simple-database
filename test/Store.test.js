@@ -1,9 +1,8 @@
 
-const app = require('../lib/app');
+const Store = require('../lib/Store');
 const chai = require('chai');
 const assert = chai.assert;
 const path = require('path');
-const Store = require('../lib/Store');
 const fs = require('fs');
 
 const {promisify} = require('util');
