@@ -1,4 +1,4 @@
-const MakeDb = require('../lib/db.js');
+const MakeDb = require('../lib/db');
 const Store = require('../lib/store');
 const path = require('path');
 const rimraf = require('rimraf');
