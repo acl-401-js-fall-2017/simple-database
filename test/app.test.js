@@ -95,7 +95,7 @@ describe('Store:', () => {
             });
             
             it('returns {removed: false} when given bad id', () => {
-                return newStore.remove(lionKing._id)
+                return newStore.remove('bad id!')
                     .then(obj => {
                         assert.deepEqual(obj, {removed: false});
                     });
