@@ -60,8 +60,7 @@ describe('Store:', () => {
                         const expectedObj = { title: 'the Jungle Book', year: '1967', _id: savedObj._id };
                         assert.deepEqual(savedObj, expectedObj);
                         assert.ok(savedObj !== jungleBook);
-                        console.log(path.join(newStore.path, savedObj._id));
-                        return readFileAsync(path.join(newStore.path, savedObj._id), 'utf8')
+                        return readFileAsync(path.join(newStore.path, savedObj._id) + '.json', 'utf8')
                             .then((data, err) => {
                                 if(err) throw err;
                                 assert.deepEqual(JSON.parse(data), expectedObj);
