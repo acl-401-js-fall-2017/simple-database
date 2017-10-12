@@ -78,7 +78,7 @@ describe('simple database', () => {
             
         });
 
-        it.only('returns {removed: false} for invalid id', () => {
+        it('returns {removed: false} for invalid id', () => {
             let newAnimal = { name: 'fido' };
 
             return animals.save(newAnimal)
@@ -94,23 +94,16 @@ describe('simple database', () => {
 
     describe('getsAll', () =>{
 
-        it('gets all files created', (done) => {
-            let puppy = { name: 'fido' }; 
-            let kitty = { name: 'meow' };
+        it.only('gets all files created', () => {
+            let newAnimal1 = { name: 'fido' }; 
+            let newAnimal2 = { name: 'meow' };
 
-            store.save(puppy, (err) => {
-                if(err) return done(err); 
-                
-                store.save(kitty, (err) => {
-                    if(err) return done(err); 
+            return animals.save(newAnimal1)
+                .then(animals.save(newAnimal2))
+                .then(animals.getAll( files => {
+                    assert.equal(files.length, 2);
+                }));
 
-                    store.getAll((err, filesArr) =>{
-                        if(err) return done(err);
-                        assert.equal(filesArr.length, 2);
-                        done();
-                    });
-                }); 
-            });
         });
     });
 
