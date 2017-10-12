@@ -1,6 +1,6 @@
 const assert = require('assert');
 const rimraf = promisify(require('rimraf'));
-// const mkdirp = promisify(require('mkdirp'));
+const mkdirp = promisify(require('mkdirp'));
 const Store = require('../lib/store');
 const path = require('path');
 
@@ -10,20 +10,24 @@ describe('create storeDir name', () => {
 
     // clear any instances of Store and make new file prior to running each test
     beforeEach(() => {
-        rimraf(testDir); 
+        return rimraf(testDir)
+            .then(( => {
+                return mkdirp(testDir)
+            }) 
         store = new Store(testDir);
     });
     
     it('gets a saved obj', () => {
         const obj = {name: 'Kate'};
 
-        store.save(obj, (err, savedObj) => {
-            if(err) return done(err);
-            assert.ok(savedObj._id);
-            assert.equal(savedObj.name, obj.name);
+        return store.save(obj)
+            .then(savedObj => {
+                assert.ok(savedObj._id);
+                assert.equal(savedObj.name, obj.name);
 
             // .get reads the contents of this file
-            store.get(savedObj._id, (err, gotObjWithId) => {
+            return store.get(savedObj._id) 
+                .then(gotObjWithId =>
                 if(err) return done(err);
                 assert.deepEqual(gotObjWithId, savedObj);
                 done();
