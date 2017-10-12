@@ -72,7 +72,11 @@ describe('Store:', () => {
 
         describe('get method', () => {
             it('returns the object with the given id', () => {
-                console.log(lionKing, mulan, moana);
+                return newStore.get(lionKing._id)
+                    .then(obj => {
+                        assert.deepEqual(obj, lionKing);    // to check that the objects are equivalent
+                        assert.notEqual(obj, lionKing);     // but not the same reference
+                    });
             });
         });
     });
