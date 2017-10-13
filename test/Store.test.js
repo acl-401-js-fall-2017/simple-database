@@ -1,5 +1,6 @@
 
 const Store = require('../lib/Store');
+const Db = require('../lib/Db');
 const chai = require('chai');
 const assert = chai.assert;
 const path = require('path');
@@ -10,13 +11,12 @@ const rimrafAsync = promisify(require('rimraf'));
 const readFileAsync = promisify(fs.readFile);
 const mkdirAsync = promisify(fs.mkdir);
 
-const storeDir = path.join(__dirname, 'testStore');
-
+const dbPath = path.join(__dirname, 'testDb');
 
 describe('Store:', () => {
     describe('constructor', () => {
         it('creates a new store object', () => {
-            const newStore = new Store(storeDir);
+            const newStore = new Store(path.join(__dirname, 'testStore'));
             assert.ok(newStore instanceof Store);
         });
     });
@@ -28,8 +28,15 @@ describe('Store:', () => {
         let mulan = null;
         let moana = null;
 
+        let testDb = null;
+        
         before(() => {
-            newStore = new Store(storeDir);
+            testDb = new Db(dbPath);
+            return new Promise((resolve) => {
+
+                newStore = new Store('disneyMovs');
+                resolve(newStore);
+            });
         });
         
         beforeEach(() => {
