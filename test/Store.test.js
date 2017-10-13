@@ -32,11 +32,10 @@ describe('Store:', () => {
         
         before(() => {
             testDb = new Db(dbPath);
-            return new Promise((resolve) => {
-
-                newStore = new Store('disneyMovs');
-                resolve(newStore);
-            });
+            return testDb.getStore('disneyMovs')
+                .then(obj => {
+                    newStore = obj;
+                });
         });
         
         beforeEach(() => {
