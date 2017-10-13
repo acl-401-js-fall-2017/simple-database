@@ -59,26 +59,25 @@ describe('make dB and stores', () => {
     });
 
 
-    it('should remove object with id', done => {
-        store.save(testObject, (err, savedtestObject) => {
-            store.remove(savedtestObject._id, (err, bool) => {
-                if (err) return done(err);
-                assert.deepEqual(bool, { removed: true });
-                store.get(savedtestObject._id, (err, data) => {
-                    if (err) return done(err);
-                    assert.deepEqual(data, null);
-                    done();
-                });               
-            });
-        });    
-    });
+    describe('remove method', () => {
+        it('returns {removed: true} for remove id', () => {
+            return store.save(testObject)
+                .then((data)=>{
+                    return store.remove(data._id);
+                })
+                .then(obj => {
+                    assert.deepEqual(obj, {removed: true});
+                });
+        });
 
-
-    it('should return remove false when passed bad id', done =>{
-        store.remove('bad id', (err, bool)=>{
-            if (err) return done(err);
-            assert.deepEqual(bool, {removed: false});
-            done();
+        it('returns {removed: false} for get with bad id', () => {
+            return store.save(testObject)
+                .then(() => {
+                    return store.remove('bad id');
+                })
+                .then(obj => {
+                    assert.deepEqual(obj, { removed: false });
+                });
         });
     });
 
