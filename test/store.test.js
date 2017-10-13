@@ -51,8 +51,11 @@ describe('make dB and stores', () => {
 
 
 
-    it('should get "bad id" return null', done => {
-        assert.deepEqual(store.get('bad id', done), null);
+    it('should get "bad id" return null', () => {
+        store.get('bad id')
+            .then((data) => {
+                assert.deepEqual(data, null);
+            });
     });
 
 
