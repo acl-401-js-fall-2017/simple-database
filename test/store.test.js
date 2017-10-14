@@ -1,4 +1,5 @@
-const assert = require('assert');
+const chai = require('chai');
+const assert = chai.assert;
 const MakeDB = require('../lib/make-db');
 const promisify = require('util').promisify;
 const path = require('path');
@@ -6,6 +7,7 @@ const rootDirectory = path.join(__dirname, 'data');
 const DB = new MakeDB(rootDirectory);
 const rimraf = promisify(require('rimraf'));
 const fs = require('fs');
+const readdir = promisify(fs.readdir);
 
 //Gives store and testObject global scope. 
 let store = null;
@@ -82,61 +84,54 @@ describe('make dB and stores', () => {
     });
 
 
-    it('getAll() should return an empty array for a newly created store', done => {
-        store.getAll((data, err)=>{
-            if (err) return done(err);
-            assert.deepEqual(data, []);
-            done();
-        });
+    it('getAll() should return an empty array for a newly created store', () => {
+        store.getAll()
+            .then((data) => {
+                assert.deepEqual(data, []);
+            });
     });
 
-    it('should return an array of all objects in the directoy.', done => {
-        store.save(testObject, (err, data)=>{
-            if (err) return done(err);
-            let savedObj1 = data;
-            store.save(testObject2, (err, data)=>{
-                if (err) return done(err);
-                let savedObj2 = data;
-                store.save(testObject3, (err, data)=>{
-                    if (err) return done(err);
-                    let savedObj3 = data;
-                    store.getAll((data, err) =>{
-                        if (err) return done(err);
-                        let sortedData = data.map((obj)=>{
-                            return obj.name;
-                        });
-                        assert.deepEqual(sortedData.sort(), [savedObj1.name, savedObj2.name, savedObj3.name].sort());
-                        done();
+
+    it('returns an array of all objects in the file system', () => {
+        let saveArr = [testObject, testObject2, testObject3];
+
+        return Promise.all(
+            saveArr.map((obj)=> store.save(obj))
+        )
+            .then((saves) => {
+                return store.getAll()
+                    .then(output => {
+                        console.log('I AM OUTPUT!!',output);
+                        console.log('I AM saves!!',saves);
+                        assert.equal(output.length, 3);
+                        assert.deepInclude(output, saves[0]);
+                        assert.deepInclude(output, saves[1]);
+                        assert.deepInclude(output, saves[2]);
                     });
-                });               
             });
-        });
     });
 
  
-    it('getStore should return an instance of the store', done => {
-        DB.getStore('animals', (err, data) => {
-            if (err) return done(err);
-            let getStoreOutput = data;
-            fs.readdir(getStoreOutput.directory, (err, data) => {
-                if(err) return done(err);
-                assert.deepEqual(data, []);
-                assert.deepEqual(getStoreOutput.directory, path.join(rootDirectory, 'animals'));
-                done();
+    it('getStore should return an instance of the store', () => {
+        return DB.getStore('animals')
+            .then((data) => {
+                readdir(data.directory, 'utf8')
+                    .then((dir) => {
+                        assert.deepEqual(dir, []);
+                        assert.deepEqual(data.directory, path.join(rootDirectory, 'animals'));
+                    });
             });
-        });
     });
 
 
-    it('should create two store instances on unique paths', (done) => {
-        DB.getStore('michele', (err, data) => {  //eslint-disable-line
-            if(err) return done(err);
-            fs.readdir(DB.rootDir, (err, data) => {
-                if(err) return done(err);
-                let sortedPathNames = data.sort();
-                assert.deepEqual(sortedPathNames, ['michele', 'testerSHane']);
-                done();
+
+    it('should create two store instances on unique paths', () => {
+        DB.getStore('michele')
+            .then(() => {
+                return readdir(DB.rootDir)
+                    .then((data) => {
+                        assert.deepEqual(data.sort(), ['michele', 'testerSHane']);
+                    });
             });
-        });
     });
 });
