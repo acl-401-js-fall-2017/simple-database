@@ -1,12 +1,13 @@
 {
-  "name": "simple-database",
+  "name": "simple-database-promisified",
   "version": "1.0.0",
-  "description": "author: Michele Greenwood co-author: Shane Moyo Date: October 6, 2017",
+  "description": "author: Michele Greenwood  Date: October 15, 2017",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
     "test": "mocha",
-    "start": "npm run test -- -w"
+    "start": "npm run test -- -w",
+    "prepublish": "npm run test"
   },
   "repository": {
     "type": "git",
