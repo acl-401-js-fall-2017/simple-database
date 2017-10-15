@@ -2,9 +2,13 @@ const assert = require('assert');
 const path = require('path');
 const promisify = require('util').promisify;
 const rimraf = promisify(require('rimraf'));
+const fs = require('fs');
+const readdir = promisify(fs.readdir);
 const mkdirp = require('mkdirp');
 const Store = require('../lib/store');
-const db = require('../lib/db');
+const MakeDB = require('../lib/MakeDB');
+const rootDir = path.join(__dirname, 'data');
+const DB = new MakeDB(rootDir);
 
 
 // const rootDirectory = path.join(__dirname, 'data') //replace data when needed
@@ -20,14 +24,12 @@ describe('simple database', () => {
     beforeEach(() => rimraf(test_dir));
 
     beforeEach(() => {
-        db.rootDir = test_dir;
-        return db.createTable('animals')
+        DB.rootDir = test_dir;
+        return DB.createTable('animals')
             .then(db => animals = db);
-    })
+    });
             
     
-
-
     describe('saves', () => {
     
         it('gets a saved object', () => {
@@ -94,7 +96,7 @@ describe('simple database', () => {
 
     describe('getsAll', () =>{
 
-        it.only('gets all files created', () => {
+        it('gets all files created', () => {
             let newAnimal1 = { name: 'fido' }; 
             let newAnimal2 = { name: 'meow' };
 
@@ -107,29 +109,28 @@ describe('simple database', () => {
         });
     });
 
-     
-    describe('Db', () => {
-        const dbTestRoot = path.join(__dirname, 'dbTestRoot');
-        let db = null;
 
-        beforeEach(done =>{
-            rimraf(dbTestRoot,err =>{
-                if(err) return done(err);
-                db = new Database(dbTestRoot);
-                done();
+    it('getStore should return an instance of store', () => {
+        return DB.getStore('animals')
+            .then((data) => {
+                readdir(data.directory, 'utf8')
+                    .then((dir) => {
+                        assert.deepEqual(dir, []);
+                        assert.deepEqual(data.root, path.join(dir, 'animals'));
+                    });
             });
-        });
+    });
 
-        it('checks the directory name exist in Db rootdir', (done) => {
-            db.getStore('testName', (err, store) => {
-                if(err) return done(err);
-                assert.ok(store instanceof Store);
-                assert.equal(store.root, path.join(dbTestRoot, 'testName') );
-                done();
+    it('should create two store instances on unique paths', () => {
+        DB.getStore('Chris')
+            .then(() => {
+                return readdir(DB.rootDir)
+                    .then((data) => {
+                        assert.deepEqual(data.sort(), ['Chris', 'test']);
+                    });
             });
-        });
-
     });
 
 });
+
 
