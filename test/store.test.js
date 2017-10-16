@@ -34,7 +34,6 @@ describe('create storeDir name', () => {
             });
     });
 
-
     it('removes files by id', () => {
         let savedObj = null;
         let obj = {name: 'Kate'};
@@ -54,19 +53,20 @@ describe('create storeDir name', () => {
     });
 
 
-    it.skip('gets and returns an array of all files', done => {
-        const obj = {name: 'Kate'};
+    it.skip('gets and returns an array of all files', () => {
+        const obj1 = {name: 'Kate'};
+        const obj2 = {name: 'David'};
         
-        store.save(obj, (err, savedObj) => {
-            if(err) return done(err);
-            assert.ok(savedObj._id);
-            assert.equal(savedObj.name, obj.name);
+        const saveArr = [store.save(obj1), store.save(obj2)];
 
-            store.getAll((err, allFiles) => {
-                if(err) return done(err);
-                assert.equal(allFiles.length, 1);
-                done();
+        return Promise.all(saveArr)
+            .then(savedObjArr => {
+                return store.getAll()
+                    .then(gotAllArr => {
+                        gotAllArr.sort();
+                        savedObjArr.sort();
+                        assert.deepEqual(gotAllArr, savedObjArr);
+                    });
             });
-        });  
-    });    
+    });
 });
