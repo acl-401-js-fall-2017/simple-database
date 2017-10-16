@@ -25,7 +25,7 @@ describe('make-store.js', () => {
     it('should save an object and get it based on ._id', () => {
         const myObject = { data : 'i like it :)' };
         let objectSaved = null;
-        store.save(myObject)
+        return store.save(myObject)
             .then(saved => {
                 objectSaved = saved;
                 assert.ok(objectSaved._id);
@@ -38,9 +38,8 @@ describe('make-store.js', () => {
     });
 
 
-
     it('call callback with null if id is bad', () => {
-        store.get('bad id')
+        return store.get('bad id')
             .then( (objectGot) => assert.deepEqual(objectGot, null) );
     });
 
@@ -49,11 +48,9 @@ describe('make-store.js', () => {
         const myObject = { data : 'i like it removed please' };
         return store.save(myObject)
             .then( (objectSaved) => {
-                console.log('objectSaved is', objectSaved);
                 return store.remove(objectSaved._id);
             })
             .then( (objectRemoved) => {
-                console.log('objectRemoved is', objectRemoved);
                 assert.deepEqual(objectRemoved, {removed: true});
             });
     });
@@ -72,24 +69,20 @@ describe('make-store.js', () => {
             { data: 'dog' }
         ];
         let saved = null;
-        return Promise.all([ 
-            toSaveArray.map(element => {
-                return store.save(element);
+
+        return Promise.all(
+            toSaveArray.map(a => store.save(a) )
+        )
+            .then( savedArray => {
+                saved = savedArray.sort((a,b) => a._id > b._id ? -1 : 1);
+                return store.getAll();
             })
-        ])
-            .then( (promiseArray) => {  
-                saved = promiseArray;
-                return promiseArray.sort(function(a, b){
-                    if(a._id < b._id) return -1;
-                    if(a._id > b._id) return 1;
-                });
-            })
-            .then( (sortedPromiseArray) => {
-                assert.deepEqual(saved, sortedPromiseArray);
+            .then( result => {
+                assert.deepEqual(saved, result);
             });
     });
 
-    it.only('getAll() returns empty array if no files exist in directory', () => {
+    it('getAll() returns empty array if no files exist in directory', () => {
         return store.getAll()
             .then( (objectArray) => { 
                 assert.deepEqual( objectArray, [] ); });
