@@ -1,0 +1,32 @@
+{
+  "name": "simple-database-promisified",
+  "version": "1.0.0",
+  "description": "author: Michele Greenwood  Date: October 15, 2017",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha",
+    "start": "npm run test -- -w",
+    "prepublish": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mugworks/simple-database.git"
+  },
+  "author": "Michele Greenwood <mugreenwood.pdx@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mugworks/simple-database/issues"
+  },
+  "homepage": "https://github.com/mugworks/simple-database#readme",
+  "devDependencies": {
+    "eslint": "^4.8.0",
+    "mocha": "^4.0.1",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "path": "^0.12.7",
+    "shortid": "^2.2.8"
+  }
+}
