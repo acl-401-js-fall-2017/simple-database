@@ -2,17 +2,16 @@ const assert = require('assert');
 const promisify = require('util').promisify;
 const MakeDB = require('../lib/make-db');
 const path = require('path');
-const rootDirectory = path.join(__dirname, 'data');
-const DB = new MakeDB(rootDirectory);
-const rimraf = promisify(require('rimraf'));
 const {readdir} = require('../lib/fsp');
-const Store = require('../lib/store');
+const rimraf = promisify(require('rimraf'));
 
 
 
-describe('make dB and stores', () => {
+describe('make stores', () => {
     
     
+    const rootDirectory = path.join(__dirname, 'data');
+    const DB = new MakeDB(rootDirectory);
     let store = null;
     beforeEach( () => {
         return rimraf(rootDirectory)
@@ -94,7 +93,7 @@ describe('make dB and stores', () => {
 
             
 
-    it('should return an array of all objects in the directoy.', () => {
+    it('should return an array of all objects in the directory.', () => {
         const testObjects = [
             {name: 'dog'},  
             {name: 'cat'},
@@ -113,26 +112,16 @@ describe('make dB and stores', () => {
             });
     });
 
-
-
-    it('getStore should return an instance of the store', () => {
-        return DB.getStore('animals')
-            .then((newStore) => {
-                assert(newStore instanceof Store);
-                assert.deepEqual(newStore.directory, path.join(rootDirectory, 'animals'));
-            });
-    });
-   
-
-
     it('should create two store instances on unique paths', () => {
-        return DB.getStore('michele')
-            .then(() => {
+        return DB.getStore('michele')  
+            .then (() => {
                 return readdir(DB.rootDir)
-                    .then((dirNames) => {
-                        assert.deepEqual(dirNames, ['michele', 'testerSHane']);
+                    .then ((data) => { 
+                        let sortedPathNames = data.sort();
+                        assert.deepEqual(sortedPathNames, ['michele', 'testerSHane']);
                     });
             });
     });
+
 });
 
