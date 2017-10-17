@@ -1,3 +1,4 @@
 node_modules
-
 .eslintrc
+DS_store
+.vc_code

@@ -1,31 +1,32 @@
 {
-  "name": "simple-database",
+  "name": "simple-database-promisified",
   "version": "1.0.0",
-  "description": "",
+  "description": "author: Michele Greenwood  Date: October 15, 2017",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "mocha",
-    "start": "npm run test -- -w"
+    "start": "npm run test -- -w",
+    "prepublish": "npm run test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DaNish808/simple-database.git"
+    "url": "git+https://github.com/mugworks/simple-database.git"
   },
-  "keywords": [],
-  "author": "David Nishikawa <triptype@gmail.com>",
+  "author": "Michele Greenwood <mugreenwood.pdx@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DaNish808/simple-database/issues"
+    "url": "https://github.com/mugworks/simple-database/issues"
   },
-  "homepage": "https://github.com/DaNish808/simple-database#readme",
+  "homepage": "https://github.com/mugworks/simple-database#readme",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "chai-http": "^3.0.0",
     "eslint": "^4.8.0",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "rimraf": "^2.6.2"
   },
   "dependencies": {
-    "rimraf": "^2.6.2",
+    "mkdirp": "^0.5.1",
+    "path": "^0.12.7",
     "shortid": "^2.2.8"
   }
 }
