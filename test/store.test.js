@@ -53,7 +53,7 @@ describe('create storeDir name', () => {
     });
 
 
-    it.skip('gets and returns an array of all files', () => {
+    it('gets and returns an array of all files', () => {
         const obj1 = {name: 'Kate'};
         const obj2 = {name: 'David'};
         
