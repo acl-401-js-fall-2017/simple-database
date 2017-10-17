@@ -92,7 +92,7 @@ describe('make stores', () => {
 
             
 
-    it('should return an array of all objects in the directoy.', () => {
+    it('should return an array of all objects in the directory.', () => {
         const testObjects = [
             {name: 'dog'},  
             {name: 'cat'},
