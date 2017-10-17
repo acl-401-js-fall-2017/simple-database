@@ -2,6 +2,7 @@ const assert = require('assert');
 const promisify = require('util').promisify;
 const MakeDB = require('../lib/make-db');
 const path = require('path');
+const {readdir} = require('../lib/fsp');
 const rimraf = promisify(require('rimraf'));
 
 
@@ -108,6 +109,17 @@ describe('make stores', () => {
             .then ((all) => {
                 all = all.map(obj => obj.name);
                 assert.deepEqual(all.sort(), savedData.sort());
+            });
+    });
+
+    it('should create two store instances on unique paths', () => {
+        return DB.getStore('michele')  
+            .then (() => {
+                return readdir(DB.rootDir)
+                    .then ((data) => { 
+                        let sortedPathNames = data.sort();
+                        assert.deepEqual(sortedPathNames, ['michele', 'testerSHane']);
+                    });
             });
     });
 
