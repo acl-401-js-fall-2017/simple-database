@@ -6,7 +6,7 @@ const { rimraf } = require('./fsp');
 
 describe('create root directories', () => {
     let db = null;
-    const testRootDir = path.join(__dirname, 'data');
+    const testRootDir = path.join(__dirname, 'test-file');
 
     beforeEach(() => {
         return rimraf(testRootDir)
