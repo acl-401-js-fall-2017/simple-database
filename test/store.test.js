@@ -7,9 +7,8 @@ const path = require('path');
 
 describe('create storeDir name', () => {
     let store = null;
-    const testDir = path.join(__dirname, 'this-file');
+    const testDir = path.join(__dirname, 'test-file');
 
-    // clear any instances of Store and make new file prior to running each test
     beforeEach(() => {
         return rimraf(testDir)
             .then(() => mkdirp(testDir))
@@ -26,7 +25,6 @@ describe('create storeDir name', () => {
                 assert.ok(savedObj._id);
                 assert.equal(savedObj.name, obj.name);
 
-                // .get reads the contents of this file
                 return store.get(savedObj._id)
                     .then(gotObjWithId => {
                         assert.deepEqual(gotObjWithId, savedObj);
