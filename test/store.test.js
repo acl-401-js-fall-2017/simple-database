@@ -7,7 +7,7 @@ const path = require('path');
 
 describe('create storeDir name', () => {
     let store = null;
-    const testDir = path.join(__dirname, 'data');
+    const testDir = path.join(__dirname, 'this-file');
 
     // clear any instances of Store and make new file prior to running each test
     beforeEach(() => {
