@@ -7,7 +7,7 @@ const path = require('path');
 
 describe('create storeDir name', () => {
     let store = null;
-    const testDir = path.join(__dirname, 'data');
+    const testDir = path.join(__dirname, 'this-file');
 
     // clear any instances of Store and make new file prior to running each test
     beforeEach(() => {
@@ -34,45 +34,39 @@ describe('create storeDir name', () => {
             });
     });
 
-
-    it.skip('removes files by id', () => {
-        const obj = {name: 'Kate'};
+    it('removes files by id', () => {
+        let savedObj = null;
+        let obj = {name: 'Kate'};
         
-        return store.save(obj)
+        store.save(obj)
             .then(_savedObj => {
                 savedObj = _savedObj;
-                assert.ok(savedObj.name, obj.name);
-
-                return store.remove(Obj._id)
+                return store.remove(obj._id)
                     .then(removedObj => {
                         assert.deepEqual(removedObj, { removed: true });
+                        return store.get(obj._id);
+                    })
+                    .then(noObj => {
+                        assert.equal(noObj, savedObj);
                     });
             });
-    //     store.save(obj, (err, savedObj) => {
-    //         if(err) return done(err);
-    //         assert.ok(savedObj._id);
-    //         assert.equal(savedObj.name, obj.name);
+    });
 
-    //         store.remove(obj._id, (err, removedObj) => {
-    //             assert.deepEqual(removedObj, { removed: true });
-    //             done();
-    //         });
-    //     });
-    }),
 
-    it.skip('gets and returns an array of all files', done => {
-        const obj = {name: 'Kate'};
+    it('gets and returns an array of all files', () => {
+        const obj1 = {name: 'Kate'};
+        const obj2 = {name: 'David'};
         
-        store.save(obj, (err, savedObj) => {
-            if(err) return done(err);
-            assert.ok(savedObj._id);
-            assert.equal(savedObj.name, obj.name);
+        const saveArr = [store.save(obj1), store.save(obj2)];
 
-            store.getAll((err, allFiles) => {
-                if(err) return done(err);
-                assert.equal(allFiles.length, 1);
-                done();
+        return Promise.all(saveArr)
+            .then(savedObjArr => {
+                return store.getAll()
+                    .then(gotAllArr => {
+                        gotAllArr.sort();
+                        savedObjArr.sort();
+                        assert.deepEqual(gotAllArr, savedObjArr);
+                    });
             });
-        });  
-    });    
+    });
 });
