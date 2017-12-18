@@ -57,22 +57,20 @@ describe('create storeDir name', () => {
             });
     });
 
-    // it.only('gets and returns an array of all files', () => {
-    //     const obj1 = { name: 'Kate' };
-    //     const obj2 = { name: 'David' };
-
-    //     const saveArr = [store.save(obj1), store.save(obj2)];
-    //     let savedObjArr = null;
-
-    //     return Promise.all(saveArr.map(item => store.save(item)))
-    //         .then(_savedObjArr => {
-    //             savedObjArr = _savedObjArr;
-    //             return store.getAll();
-    //         })
-    //         .then(gotAllArr => {
-    //             gotAllArr.sort();
-    //             savedObjArr.sort();
-    //             assert.deepEqual(gotAllArr, savedObjArr);
-    //         });
-    // });
+    it('gets all objects', () => {
+        const obj = [
+            {name: 'Kate'},
+            {name: 'David'}
+        ];
+        let savedObj = null;
+        return Promise.all(obj.map(item => store.save(item)))
+            .then(_savedObj => {
+                savedObj = _savedObj;
+                savedObj.sort((x,y) => x._id < y._id ? -1 : 1);
+                return store.getAll();
+            })
+            .then(gotAll => {
+                assert.deepEqual(gotAll, savedObj);
+            });
+    });
 });
