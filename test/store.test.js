@@ -1,11 +1,10 @@
 const assert = require('assert');
-const promisify = require('util').promisify;
-const rimraf = promisify(require('rimraf'));
-const mkdirp = promisify(require('mkdirp'));
+// const promisify = require('util').promisify;
+const { rimraf, mkdirp } = require('../lib/fsp');
 const Store = require('../lib/store');
 const path = require('path');
 
-describe('create storeDir name', () => {
+describe.only('create storeDir name', () => {
     let store = null;
     const testDir = path.join(__dirname, 'test-file');
 
@@ -37,17 +36,24 @@ describe('create storeDir name', () => {
         let savedObj = null;
         let obj = { name: 'Kate' };
 
-        store.save(obj)
+        return store.save(obj)
             .then(_savedObj => {
                 savedObj = _savedObj;
-                return store.remove(obj._id);
+                return store.remove(savedObj._id);
             })
             .then(removedObj => {
                 assert.deepEqual(removedObj, { removed: true });
-                return store.get(obj._id);
+                return store.get(savedObj._id);
             })
-            .then(noObj => {
-                assert.equal(noObj, savedObj);
+            .then(savedObj => {
+                assert.equal(savedObj, null);
+            });
+    });
+
+    it('tests for no id', () => {
+        return store.remove('no id')
+            .then(status => {
+                assert.deepEqual(status, { removed: false });
             });
     });
 
