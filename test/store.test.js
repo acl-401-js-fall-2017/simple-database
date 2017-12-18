@@ -4,7 +4,7 @@ const { rimraf, mkdirp } = require('../lib/fsp');
 const Store = require('../lib/store');
 const path = require('path');
 
-describe.only('create storeDir name', () => {
+describe('create storeDir name', () => {
     let store = null;
     const testDir = path.join(__dirname, 'test-file');
 
@@ -57,7 +57,7 @@ describe.only('create storeDir name', () => {
             });
     });
 
-    // it('gets and returns an array of all files', () => {
+    // it.only('gets and returns an array of all files', () => {
     //     const obj1 = { name: 'Kate' };
     //     const obj2 = { name: 'David' };
 
