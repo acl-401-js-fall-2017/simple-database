@@ -1,27 +1,22 @@
 const assert = require('assert');
 const Db = require('../lib/make-db');
-const rimraf = require('rimraf');
 const path = require('path');
 const Store = require('../lib/store');
+const { rimraf } = require('../lib/fsp');
 
 describe('create root directories', () => {
     let db = null;
-    const testRootDir = path.join(__dirname, 'data');
+    const testRootDir = path.join(__dirname, 'test-file');
 
-    beforeEach(done => {
-        rimraf(testRootDir, err => {
-            if(err) return done(err);
-            db = new Db(testRootDir);
-            done();
-
-        });
+    beforeEach(() => {
+        return rimraf(testRootDir)
+            .then(() => db = new Db(testRootDir));
     });
 
-    it('checks for instances of Store', done => {
-        db.getStore('storeName', (err, checkedStore) => {
-            if (err) return (err);
-            assert.ok(checkedStore instanceof Store);
-            done();
-        });
+    it('checks for instances of Store', () => {
+        return db.getStore('storeName') 
+            .then(checkedStore => {
+                assert.ok(checkedStore instanceof Store);
+            });
     });
 });
